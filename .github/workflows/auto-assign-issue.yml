@@ -1,0 +1,26 @@
+name: Auto Assign Issue Creator
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  auto-assign:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Auto-assign issue to creator
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const issue = context.payload.issue;
+            
+            // Assign issue to creator
+            await github.rest.issues.addAssignees({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue.number,
+              assignees: [issue.user.login]
+            });
+            
+            console.log(`Issue #${issue.number} has been automatically assigned to creator ${issue.user.login}`); 

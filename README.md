@@ -6,7 +6,7 @@
 - w.hanseul
 
 ## Local development
-1. Create `.env` file:
+1. Create `.env.local` file:
    ```sh
    $ cp .env.example .env
    ```
