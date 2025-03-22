@@ -3,16 +3,16 @@
 
 ## Tech
 ### Base
-- Next 15 App router + RSC
-- Supabase
-- React 19
-- Feature-Sliced Design (FSD)
+- [Next 15 App router + RSC](https://nextjs.org/docs)
+- [Supabase](https://supabase.com/docs)
+- [React 19](https://react.dev/)
+- [Feature-Sliced Design (FSD)](https://feature-sliced.github.io/documentation/)
 
 ### Sub
-- Zod
-- React-hook-form
+- [Zod](https://zod.dev/)
+- [React-hook-form](https://react-hook-form.com/)
 
 ## Design
-- shadcnUI
-- V0
+- [shadcnUI](https://ui.shadcn.com/)
+- [V0](https://v0.dev/)
 
