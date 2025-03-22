@@ -4,3 +4,9 @@
 ## Developers
 - milooy
 - w.hanseul
+
+## Dev server
+```sh
+$ npm install
+$ npm run dev 
+```
