@@ -22,6 +22,7 @@
 - Minimize conditional syntax:
   - Avoid unnecessary curly braces
   - Omit braces for single-line statements
+- Always start with proper TypeScript interfaces/types
 
 ### Error Handling
 - Handle errors and edge cases first (early returns)
@@ -29,9 +30,14 @@
 - Avoid nested if statements and unnecessary else blocks
 - Use guard clauses for preconditions
 - Return errors as values in Server Actions rather than try/catch
+- Create error boundaries in error.tsx and global-error.tsx files
+- Services should throw user-friendly errors (for tanStackQuery)
 
 ### React Components
 - Write as functions (not arrow functions stored in constants)
 - Use declarative JSX
 - Extract static content to variables outside render functions
-- Place interfaces and types at file end 
+- Place interfaces and types at file end
+- Prioritize Server Components where possible
+- Minimize 'use client' usage (only for Web API access)
+- Wrap client components in Suspense with fallback 

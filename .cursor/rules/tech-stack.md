@@ -56,4 +56,20 @@
 - Mobile-first responsive design with Tailwind
 - Shadcn UI for component library
 - Optimize images with WebP, lazy loading
-- Ensure accessibility with proper ARIA attributes 
+- Ensure accessibility with proper ARIA attributes
+
+### Development Workflow
+- Follow Next.js App Router patterns and best practices
+- Prioritize Server Components over Client Components
+- Minimize 'use client' usage:
+  - Prefer server components and Next.js SSR features
+  - Use 'use client' only for Web API access in small components
+  - Avoid using 'use client' for data fetching or state management
+- Rely on Next.js App Router for state changes
+- Wrap client components in Suspense with fallback
+- Use dynamic loading for non-critical components
+- Create error boundaries using error.tsx and global-error.tsx files
+- Prioritize Web Vitals (LCP, CLS, FID) for performance
+- Follow FSD architecture principles
+- Use utility functions from shared/ layer
+- Create thorough documentation for complex features 
