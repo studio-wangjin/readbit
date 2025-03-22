@@ -69,6 +69,25 @@
     - Ensure all server actions return the ActionResponse type
     - Implement consistent error handling and success responses using ActionResponse
 
+  React Hook Form
+    - Use react-hook-form for all form handling in the application
+    - Integrate with Zod for schema validation using @hookform/resolvers/zod
+    - Use the FormProvider and useFormContext for complex nested forms
+    - Always define form types using Zod schemas:
+      - Create a schema with zod
+      - Generate TypeScript types using z.infer<typeof schema>
+      - Pass the schema to the resolver
+    - Prefer controlled components with register over uncontrolled components
+    - Use defaultValues for initializing form state
+    - Implement form validation at the field level and form level
+    - Use watch() sparingly as it can affect performance
+    - Leverage formState for tracking validation state and errors
+    - For complex forms, split into smaller component forms using FormProvider
+    - Combine with Server Actions by using handleSubmit to prepare data before submission
+    - Use reset() after successful form submission
+    - Implement proper error handling in onError callback
+    - Ensure proper accessibility with aria-attributes and error messages
+    - Use Controller component for complex input components that can't use register
 
   UI and Styling
     - Use Shadcn UI for components and styling.
