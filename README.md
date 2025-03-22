@@ -5,7 +5,14 @@
 - milooy
 - w.hanseul
 
-## Dev server
+## Local development
+1. Create `.env` file:
+   ```sh
+   $ cp .env.example .env
+   ```
+Contact @milooy for environment variable values.
+
+2. Run dev server
 ```sh
 $ npm install
 $ npm run dev 
