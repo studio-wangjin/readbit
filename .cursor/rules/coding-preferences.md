@@ -1,33 +1,37 @@
 ## Coding Preferences - Code Style & Quality Standards
 
-### General Coding Style
-- Use functional, declarative programming. Avoid classes.
-- Prefer iteration and modularization over duplication.
-- Use descriptive variable names with auxiliary verbs (e.g., isLoading).
-- Use lowercase with dashes for directories (e.g., components/auth-wizard).
-- Favor named exports for components.
-- Use the Receive an Object, Return an Object (RORO) pattern.
+### Core Principles
+- **Simplicity**: Always prioritize the simplest solution over complexity
+- **DRY (Don't Repeat Yourself)**: Avoid code duplication, reuse functionality
+- **Organization**: Keep files under 300 lines, refactor when needed
+- **Documentation**: Create `/docs/[component].md` after major component development
+
+### Code Structure
+- Use functional, declarative programming (avoid classes)
+- Favor composition over inheritance
+- Structure files: exports → subcomponents → helpers → types
+- Follow naming conventions:
+  - Use descriptive names with auxiliary verbs (isLoading, handleClick)
+  - Use lowercase with dashes for directories (components/auth-wizard)
+  - Prefer named exports for components
+- Apply RORO pattern (Receive Object, Return Object)
 
 ### JavaScript/TypeScript
-- Use "function" keyword for pure functions. Omit semicolons.
-- Use TypeScript for all code. Prefer interfaces over types. Avoid enums, use maps.
-- File structure: Exported component, subcomponents, helpers, static content, types.
-- Avoid unnecessary curly braces in conditional statements.
-- For single-line statements in conditionals, omit curly braces.
+- Use "function" keyword for pure functions, omit semicolons
+- Prefer interfaces over types, use maps instead of enums
+- Minimize conditional syntax:
+  - Avoid unnecessary curly braces
+  - Omit braces for single-line statements
 
-### Error Handling and Validation
-- Handle errors and edge cases at the beginning of functions.
-- Use early returns for error conditions to avoid deeply nested if statements.
-- Place the happy path last in the function for improved readability.
-- Avoid unnecessary else statements; use if-return pattern instead.
-- Use guard clauses to handle preconditions and invalid states early.
-- Implement proper error logging and user-friendly error messages.
-- Consider using custom error types or error factories for consistent error handling.
-- Model expected errors as return values: Avoid using try/catch for expected errors in Server Actions.
+### Error Handling
+- Handle errors and edge cases first (early returns)
+- Place happy path last for better readability
+- Avoid nested if statements and unnecessary else blocks
+- Use guard clauses for preconditions
+- Return errors as values in Server Actions rather than try/catch
 
 ### React Components
-- Use functional components and TypeScript interfaces.
-- Use declarative JSX.
-- Use function, not const, for components.
-- Place static content and interfaces at file end.
-- Use content variables for static content outside render functions. 
+- Write as functions (not arrow functions stored in constants)
+- Use declarative JSX
+- Extract static content to variables outside render functions
+- Place interfaces and types at file end 
