@@ -7,9 +7,9 @@
 
 ## Local development
 1. Create `.env.local` file:
-   ```sh
-   $ cp .env.example .env
-   ```
+```sh
+$ cp .env.example .env.local
+```
 Contact @milooy for environment variable values.
 
 2. Run dev server
