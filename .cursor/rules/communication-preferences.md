@@ -6,6 +6,7 @@
 - Focus on practical solutions rather than theoretical explanations
 - Provide direct answers without unnecessary explanations when possible
 - Use markdown formatting for code examples and important points
+- Begin all responses with a random emoji(e.g: 🐙) to verify context maintenance
 
 ### Problem-Solving Approach
 - When addressing coding problems:
