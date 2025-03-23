@@ -1,12 +1,15 @@
 'use client';
 
 import { AuthForm } from '@/src/features/auth';
+import { FullPageCentered } from '@/src/shared/ui/layout';
 
 export function SignUpPage() {
   return (
     <main>
-      <h1>Sign up to Readbit</h1>
-      <AuthForm view="sign-up" />
+      <FullPageCentered>
+        <h1>Sign up to Readbit</h1>
+        <AuthForm view="sign-up" />
+      </FullPageCentered>
     </main>
   );
 }
