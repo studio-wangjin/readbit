@@ -1,13 +1,15 @@
 # 폴더 구조
 
 Next.js App router와 Feature-Sliced Design(FSD) 아키텍처를 따릅니다. 관심사 분리와 모듈화된 개발을 지향합니다.
+https://feature-sliced.github.io/documentation/kr/docs/get-started/overview
 
 ## 레이어 구조
 
 ```
 src/
-├── app/         - 애플리케이션 초기화 및 라우팅
-├── widgets/     - 독립적인 페이지 블록, 여러 기능 통합
+├── app/         - 애플리케이션 초기화 및 라우팅 (Next.js App Router)
+├── pages/       - 페이지 컴포넌트 (페이지 구성 및 레이아웃)
+├── widgets/     - 독립적인 페이지 블록, 여러 feature의 통합
 ├── features/    - 사용자 상호작용 및 비즈니스 로직
 ├── entities/    - 비즈니스 엔티티 (사용자, 상품 등)
 ├── shared/      - 재사용 가능한 인프라, UI, 라이브러리
@@ -37,19 +39,44 @@ Slice는 Segment로 구성됩니다. '목적'기반으로 묶입니다.
 
 ### 🌐 app/
 
-애플리케이션 초기화, 라우팅, 글로벌 스타일 설정을 담당합니다. Next.js App Router 구조를 따릅니다. 본 프로젝트는 FSD의 app/ + page/ 폴더를 합쳐서 app/폴더로 사용합니다.
-- auth/
-  - `sign-in/page.tsx`: 로그인 페이지
-  - `sign-up/page.tsx`: 가입 페이지
-- dashboard/
-  - `page.tsx`: 로그인 유저의 홈 페이지
+애플리케이션 초기화, 라우팅, 기본 레이아웃을 담당합니다. Next.js App Router 구조를 따릅니다. 실제 페이지 컴포넌트 구현은 pages/ 레이어에 있습니다.
+- auth
+  - sign-in/
+    - `page.tsx`: 로그인 페이지
+  - sign-up/
+    - `page.tsx`: 회원가입 페이지
+  - verify/
+    - `page.tsx`: 이메일 인증 페이지
+- dashboard
+  - `page.tsx`: 대시보드 페이지 (로그인 유저의 홈)
 - `page.tsx`: 비로그인 유저의 랜딩 페이지
+
+```tsx
+import { FeedPage } from "pages/feed";
+
+export const meta: MetaFunction = () => {
+  return [{ title: "Conduit" }];
+};
+
+export default FeedPage;
+```
+
+### 📄 pages/
+
+페이지 컴포넌트를 관리합니다. app/ 레이어의 라우팅 엔드포인트에 대응되는 실제 페이지 구현을 담당합니다.
+- auth/
+  - sign-in/
+    - ui
+    - model
+    - api
+  - sign-up/
+- dashboard/
 
 
 ### 🧩 widgets/
 
 독립적인 페이지 블록으로, 여러 기능과 엔티티로 구성된 복합 UI입니다.
-app에 위치한 페이지 컴포넌트에서 조합하여 사용하기 위한 거의 완성된 독립 기능들입니다.
+pages에 위치한 페이지 컴포넌트에서 조합하여 사용하기 위한 거의 완성된 독립 기능들입니다.
 
 ### ⚙️ features/
 
@@ -57,7 +84,9 @@ app에 위치한 페이지 컴포넌트에서 조합하여 사용하기 위한 �
 widgets를 구성하기 위한 비즈니스 로직의 구체적인 표현 기능들 (결제, 재생, 좋아요, 환불 등)입니다.
 
 - auth: 인증 관련 기능
-
+  - api/ - API 호출 관련 코드
+  - model/ - 비즈니스 로직 및 상태
+  - ui/ - 인증 관련 UI 컴포넌트
 
 ### 🧠 entities/
 
@@ -66,7 +95,7 @@ features에서 구체적인 동작이 부여되기 전인 비즈니스 주체들
 
 ### 🔄 shared/
 
-특정 비즈니스 로직에 종속되지 않는 재사용 가능한 코드로, 프로젝트 전체에서 사용되는 인프라, UI, 라이브러리가 포함됩니다. slice로 나누지 않습ㄴ디ㅏ.
+특정 비즈니스 로직에 종속되지 않는 재사용 가능한 코드로, 프로젝트 전체에서 사용되는 인프라, UI, 라이브러리가 포함됩니다. slice로 나누지 않습니다.
 
 ```
 shared/
@@ -81,9 +110,20 @@ shared/
 └── ui/             - 공통 UI 컴포넌트
 ```
 
+## app/ 레이어와 pages/ 레이어의 관계
+
+FSD 아키텍처에서 원래 app/ 레이어는 애플리케이션 초기화에 집중하고, pages/ 레이어는 페이지 구성에 집중합니다. Next.js의 App Router에서는 이 둘의 경계가 모호해질 수 있습니다.
+
+페이지 로직과 라우팅 구성을 분리하기 위해 다음과 같은 접근을 채택했습니다:
+
+1. **app/ 레이어**: Next.js의 파일 기반 라우팅, 전역 레이아웃, 에러 처리, 로딩 상태 등 Next.js의 프레임워크 기능만 담당
+2. **pages/ 레이어**: 실제 페이지 컴포넌트 구현과 비즈니스 요구사항 조합을 담당
+
+이러한 분리를 통해 라우팅 구조와 페이지 구현을 독립적으로 관리할 수 있어 테스트 용이성과 유지보수성이 향상됩니다.
+
 ## FSD 개발 원칙
 
-1. **상향식 의존성**: 각 모듈은 자신보다 낮은 레이어의 모듈만 의존할 수 있습니다 (app → widgets → features → entities → shared).
+1. **상향식 의존성**: 각 모듈은 자신보다 낮은 레이어의 모듈만 의존할 수 있습니다 (app → pages → widgets → features → entities → shared).
   - e.g. features레이어는 widget의 컴포넌트를 참조할 수 없음
   - 슬라이스는 같은 레이어 안에서 다른 슬라이스를 참조할 수 없다. 예를 들어, User 슬라이스는 같은 레이어의 Product 슬라이스를 참조할 수 없으며, 오직 필요한 경우에 한해 하위 레이어의 공통 요소들만 참조할 수 있다. 
 2. **명시적 공개 API**: 각 모듈은 index.ts를 통해 공개 API를 명시적으로 제공합니다.
@@ -94,6 +134,7 @@ shared/
    - **ui/**: 사용자 인터페이스 컴포넌트
    - **model/**: 상태 관리 및 비즈니스 로직
    - **lib/**: 유틸리티 및 헬퍼 함수
+   - **api/**: 외부 시스템과의 통신
 
 이 구조는 확장성, 유지보수성, 재사용성을 극대화하는 데 초점을 맞추고 있습니다.
 
