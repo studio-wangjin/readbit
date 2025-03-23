@@ -1,1 +1,0 @@
-export { VerifyPage } from './ui/VerifyPage' 

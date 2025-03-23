@@ -1,17 +1,17 @@
-import { AuthForm } from '@/src/features/auth'
-import { getCurrentUser } from '@/src/shared/lib/auth'
-import { redirect } from 'next/navigation'
+'use client'
 
-export default async function SignInPage() {
-  // 이미 로그인된 사용자는 대시보드로 리디렉션
-  const user = await getCurrentUser()
-  if (user) {
-    redirect('/dashboard')
-  }
-  
+import { AuthForm } from '@/src/features/auth'
+
+export function SignInPage() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4">
-      <h1 className="text-3xl font-bold mb-8">Welcome Back</h1>
+    <div className="min-h-screen flex flex-col justify-center">
+      <div className="text-center mb-6">
+        <h1 className="text-3xl font-bold">Readbit에 로그인</h1>
+        <p className="text-gray-600 mt-2">
+          계정에 로그인하고 학습을 이어가세요.
+        </p>
+      </div>
+      
       <AuthForm view="sign-in" />
     </div>
   )

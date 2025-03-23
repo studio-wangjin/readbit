@@ -1,4 +1,4 @@
-export { SignInPage } from './sign-in'
-export { SignUpPage } from './sign-up'
-export { VerifyPage } from './verify'
+export { SignInPage } from './ui/SignInPage'
+export { SignUpPage } from './ui/SignUpPage'
+export { VerifyPage } from './ui/VerifyPage'
 

@@ -1,4 +1,4 @@
-import { SignInPage } from '@/src/pages/auth/sign-in'
+import { SignInPage } from '@/src/pages/auth'
 import { getCurrentUser } from '@/src/shared/lib/auth'
 import { redirect } from 'next/navigation'
 
