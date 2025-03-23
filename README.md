@@ -31,3 +31,15 @@ $ npm run lint:fsd
 # Fix some violations automatically
 $ npm run lint:fsd:fix
 ```
+
+## UI Components
+
+This project uses [Shadcn UI](https://ui.shadcn.com/) for components. We've integrated it with our FSD architecture by placing components in the `shared` layer:
+
+```sh
+# Add a new component
+$ npx shadcn-ui@latest add button
+
+# This will add the component to src/shared/ui according to our FSD structure
+```
+Refer to our `components.json` for the full configuration.
