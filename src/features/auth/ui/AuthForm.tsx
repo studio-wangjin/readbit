@@ -146,22 +146,6 @@ export function AuthForm({ view }: AuthFormProps) {
           view={view}
           provider="google"
         />
-
-        {view === 'sign-in' ? (
-          <p className="text-center text-sm mt-4">
-            계정이 없으신가요?{' '}
-            <a href="/auth/sign-up" className="text-blue-600 hover:underline">
-              회원가입
-            </a>
-          </p>
-        ) : (
-          <p className="text-center text-sm mt-4">
-            이미 계정이 있으신가요?{' '}
-            <a href="/auth/sign-in" className="text-blue-600 hover:underline">
-              로그인
-            </a>
-          </p>
-        )}
       </form>
     </Form>
   );
