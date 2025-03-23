@@ -21,6 +21,8 @@ import {
 } from '@/src/shared/ui/form';
 import { Input } from '@/src/shared/ui/input';
 import { OAuthButton } from '@/src/shared/ui/OAuthButton';
+import { Button } from '@/src/shared/ui/button';
+import { Divider } from '@/src/shared/ui/divider';
 
 type AuthFormProps = {
   view: 'sign-in' | 'sign-up';
@@ -54,8 +56,10 @@ export function AuthForm({ view }: AuthFormProps) {
         router.push('/auth/verify');
       }
     } catch (error) {
-      console.error('인증 오류:', error);
-      setServerError(error instanceof Error ? error.message : '인증 과정에서 오류가 발생했습니다');
+      console.error('Authentication error:', error);
+      setServerError(
+        error instanceof Error ? error.message : 'An error occurred during authentication'
+      );
     } finally {
       setIsLoading(false);
     }
@@ -67,11 +71,11 @@ export function AuthForm({ view }: AuthFormProps) {
 
     try {
       await signInWithGoogle();
-      // OAuth는 리디렉션되므로 여기서는 추가 작업 필요 없음
+      // OAuth redirects, so no additional work needed here
     } catch (error) {
-      console.error('Google 로그인 오류:', error);
+      console.error('Google sign-in error:', error);
       setServerError(
-        error instanceof Error ? error.message : 'Google 로그인 과정에서 오류가 발생했습니다'
+        error instanceof Error ? error.message : 'An error occurred during Google sign-in'
       );
       setIsLoading(false);
     }
@@ -89,7 +93,7 @@ export function AuthForm({ view }: AuthFormProps) {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>이메일</FormLabel>
+              <FormLabel>Email</FormLabel>
               <FormControl>
                 <Input
                   type="email"
@@ -108,7 +112,7 @@ export function AuthForm({ view }: AuthFormProps) {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>비밀번호</FormLabel>
+              <FormLabel>Password</FormLabel>
               <FormControl>
                 <Input type="password" disabled={isLoading} placeholder="••••••••" {...field} />
               </FormControl>
@@ -117,28 +121,11 @@ export function AuthForm({ view }: AuthFormProps) {
           )}
         />
 
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-md font-medium disabled:opacity-70 mt-4"
-        >
-          {isLoading
-            ? view === 'sign-in'
-              ? '로그인 중...'
-              : '회원가입 중...'
-            : view === 'sign-in'
-              ? '로그인'
-              : '회원가입'}
-        </button>
+        <Button type="submit" disabled={isLoading} loading={isLoading} className="w-full mt-4">
+          {view === 'sign-in' ? 'Sign in' : 'Sign up'}
+        </Button>
 
-        <div className="relative my-4">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-300"></div>
-          </div>
-          <div className="relative flex justify-center text-sm">
-            <span className="px-2 bg-white text-gray-500">또는</span>
-          </div>
-        </div>
+        <Divider>or</Divider>
 
         <OAuthButton
           onClick={handleGoogleSignIn}
