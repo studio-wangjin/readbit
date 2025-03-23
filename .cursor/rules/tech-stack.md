@@ -11,7 +11,7 @@
 ### Architecture - Feature-Sliced Design (FSD)
 - Layer hierarchy (top to bottom):
   - app/ - Application configuration
-  - pages/ - Route pages and layouts
+  - views/ - Route pages and layouts (use views, rather than pages)
   - widgets/ - Independent page blocks
   - features/ - User interactions and business logic
   - entities/ - Business entities (users, products)

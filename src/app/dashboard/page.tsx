@@ -1,4 +1,4 @@
-import { DashboardPage } from '@/src/pages/dashboard'
+import { DashboardPage } from '@/src/views/dashboard'
 import { getCurrentUser } from '@/src/shared/lib/auth'
 import { redirect } from 'next/navigation'
 
