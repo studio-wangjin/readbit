@@ -2,17 +2,15 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { createClient } from '@/src/shared/api/supabase/client'
-
-const authFormSchema = z.object({
-  email: z.string().email('유효한 이메일을 입력해주세요'),
-  password: z.string().min(6, '비밀번호는 최소 6자 이상이어야 합니다'),
-})
-
-type AuthFormValues = z.infer<typeof authFormSchema>
+import { 
+  authFormSchema, 
+  type AuthFormValues,
+  signInWithPassword,
+  signUp,
+  signInWithGoogle
+} from '../model/auth-service'
 
 type AuthFormProps = {
   view: 'sign-in' | 'sign-up'
@@ -40,29 +38,12 @@ export function AuthForm({ view }: AuthFormProps) {
     setServerError(null)
     
     try {
-      const supabase = createClient()
-      
       if (view === 'sign-in') {
-        const { error } = await supabase.auth.signInWithPassword({
-          email: data.email,
-          password: data.password,
-        })
-        
-        if (error) throw error
-        
+        await signInWithPassword(data)
         router.refresh()
         router.push('/dashboard')
       } else {
-        const { error } = await supabase.auth.signUp({
-          email: data.email,
-          password: data.password,
-          options: {
-            emailRedirectTo: `${window.location.origin}/auth/callback`,
-          },
-        })
-        
-        if (error) throw error
-        
+        await signUp(data)
         // 이메일 확인 페이지로 이동
         router.push('/auth/verify')
       }
@@ -79,15 +60,8 @@ export function AuthForm({ view }: AuthFormProps) {
     setServerError(null)
     
     try {
-      const supabase = createClient()
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
-        },
-      })
-      
-      if (error) throw error
+      await signInWithGoogle()
+      // OAuth는 리디렉션되므로 여기서는 추가 작업 필요 없음
     } catch (error) {
       console.error('Google 로그인 오류:', error)
       setServerError(error instanceof Error ? error.message : 'Google 로그인 과정에서 오류가 발생했습니다')
