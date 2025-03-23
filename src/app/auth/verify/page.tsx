@@ -1,4 +1,4 @@
-import { VerifyPage } from '@/src/pages/auth'
+import { VerifyPage } from '@/src/views/auth'
 import { getCurrentUser } from '@/src/shared/lib/auth'
 import { redirect } from 'next/navigation'
 
