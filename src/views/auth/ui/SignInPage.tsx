@@ -1,18 +1,21 @@
-'use client'
+'use client';
 
-import { AuthForm } from '@/src/features/auth'
+import { AuthForm } from '@/src/features/auth';
+import { FullPageCentered } from '@/src/shared/ui/layout';
 
 export function SignInPage() {
   return (
-    <div className="min-h-screen flex flex-col justify-center">
-      <div className="text-center mb-6">
-        <h1 className="text-3xl font-bold">Readbit에 로그인</h1>
-        <p className="text-gray-600 mt-2">
-          계정에 로그인하고 학습을 이어가세요.
+    <main>
+      <FullPageCentered>
+        <h1>Sign in to Readbit</h1>
+        <AuthForm view="sign-in" />
+        <p className="text-center text-sm mt-4">
+          Don&apos;t have an account?{' '}
+          <a href="/auth/sign-up" className="text-blue-600 hover:underline">
+            Sign up
+          </a>
         </p>
-      </div>
-      
-      <AuthForm view="sign-in" />
-    </div>
-  )
-} 
+      </FullPageCentered>
+    </main>
+  );
+}

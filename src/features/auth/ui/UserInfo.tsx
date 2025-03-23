@@ -1,46 +1,56 @@
-import { User } from '@supabase/supabase-js'
-import { LogoutButton } from './LogoutButton'
+import { User } from '@supabase/supabase-js';
+import { LogoutButton } from './LogoutButton';
+import { Card, CardHeader, CardContent, CardTitle } from '@/src/shared/ui/card';
 
 interface UserInfoProps {
-  user: User
+  user: User;
 }
 
 export function UserInfo({ user }: UserInfoProps) {
   return (
-    <div className="p-6 bg-white rounded-lg shadow-md space-y-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-xl font-bold">사용자 정보</h2>
-        <LogoutButton className="px-4 py-2 text-sm bg-red-500 hover:bg-red-600 text-white rounded-md" />
-      </div>
-      
-      <div className="space-y-2">
-        <div className="flex items-center space-x-2">
-          <span className="font-medium">이메일:</span>
-          <span>{user.email}</span>
+    <Card>
+      <CardHeader>
+        <div className="flex justify-between items-center">
+          <CardTitle>User Information</CardTitle>
+          <LogoutButton variant="destructive" size="sm" />
         </div>
-        
-        <div className="flex items-center space-x-2">
-          <span className="font-medium">ID:</span>
-          <span className="text-sm font-mono">{user.id}</span>
+      </CardHeader>
+
+      <CardContent>
+        <div className="space-y-3">
+          <UserInfoItem label="Email" value={user.email} />
+
+          <UserInfoItem label="ID" value={user.id} valueClassName="text-sm font-mono" />
+
+          <UserInfoItem
+            label="Authentication Method"
+            value={user.app_metadata.provider || 'Email/Password'}
+          />
+
+          <UserInfoItem
+            label="Email Verification"
+            value={user.email_confirmed_at ? 'Verified' : 'Not Verified'}
+            valueClassName={user.email_confirmed_at ? 'text-green-600' : 'text-red-600'}
+          />
+
+          <UserInfoItem label="Joined" value={new Date(user.created_at).toLocaleDateString()} />
         </div>
-        
-        <div className="flex items-center space-x-2">
-          <span className="font-medium">인증 방법:</span>
-          <span>{user.app_metadata.provider || '이메일/비밀번호'}</span>
-        </div>
-        
-        <div className="flex items-center space-x-2">
-          <span className="font-medium">이메일 인증:</span>
-          <span className={user.email_confirmed_at ? 'text-green-600' : 'text-red-600'}>
-            {user.email_confirmed_at ? '인증됨' : '인증되지 않음'}
-          </span>
-        </div>
-        
-        <div className="flex items-center space-x-2">
-          <span className="font-medium">가입일:</span>
-          <span>{new Date(user.created_at).toLocaleDateString()}</span>
-        </div>
-      </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+interface UserInfoItemProps {
+  label: string;
+  value: string | null | undefined;
+  valueClassName?: string;
+}
+
+function UserInfoItem({ label, value, valueClassName }: UserInfoItemProps) {
+  return (
+    <div className="flex items-center">
+      <span className="font-medium mr-2">{label}:</span>
+      <span className={valueClassName}>{value}</span>
     </div>
-  )
-} 
+  );
+}
