@@ -3,9 +3,9 @@ export interface Article {
   title: string;
   content: string;
   link: string;
-  userId: string;
-  createdAt: string;
-  updatedAt: string;
+  user_id: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface CreateArticleDto {

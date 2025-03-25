@@ -15,9 +15,9 @@ export function ArticleDetail({ article }: ArticleDetailProps) {
         <div>
           <h1 className="text-3xl font-bold mb-2">{article.title}</h1>
           <div className="flex items-center space-x-4 text-sm text-gray-500">
-            <span>Author: {article.userId}</span>
+            <span>Author: {article.user_id}</span>
             <span>
-              {formatDistanceToNow(new Date(article.createdAt), {
+              {formatDistanceToNow(new Date(article.created_at), {
                 addSuffix: true,
                 locale: ko,
               })}

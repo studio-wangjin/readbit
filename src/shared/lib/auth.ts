@@ -1,11 +1,11 @@
-import { createClient } from '@/src/shared/api/supabase/server';
 import { redirect } from 'next/navigation';
+import { createServerSupabaseClient } from './supabase/server';
 
 /**
  * 현재 로그인된 사용자 정보를 가져옵니다.
  */
 export async function getCurrentUser() {
-  const supabase = await createClient();
+  const supabase = await createServerSupabaseClient();
 
   try {
     const {
@@ -36,7 +36,7 @@ export async function requireAuth() {
  * 특정 역할을 가진 사용자만 접근 가능하도록 합니다.
  */
 export async function requireRole(allowedRoles: string[]) {
-  const supabase = await createClient();
+  const supabase = await createServerSupabaseClient();
   const { data, error } = await supabase.auth.getUser();
 
   if (error || !data.user) {

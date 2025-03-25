@@ -34,7 +34,7 @@ export function ArticleList({ articles, onDelete }: ArticleListProps) {
                 {article.title}
               </Link>
               <p className="text-sm text-gray-500 mt-1">
-                {formatDistanceToNow(new Date(article.createdAt), {
+                {formatDistanceToNow(new Date(article.created_at), {
                   addSuffix: true,
                   locale: ko,
                 })}
