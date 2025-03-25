@@ -22,7 +22,7 @@ export function useMyArticles() {
   }, []);
 
   const deleteArticle = async (id: string) => {
-    if (!window.confirm('정말 삭제하시겠습니까?')) return;
+    if (!window.confirm('Are you sure you want to delete this article?')) return;
 
     try {
       await articleApi.deleteArticle(id);

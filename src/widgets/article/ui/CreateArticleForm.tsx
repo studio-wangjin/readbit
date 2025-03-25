@@ -38,7 +38,7 @@ export function CreateArticleForm() {
   const onSubmit = async (data: CreateArticleDto) => {
     try {
       await createArticle(data);
-      router.push('/articles');
+      router.push('/articles/my');
     } catch (error) {
       console.error('Failed to create article:', error);
     }
