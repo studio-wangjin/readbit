@@ -14,7 +14,7 @@ export function ArticleLink({ article }: ArticleLinkProps) {
         rel="noopener noreferrer"
         className="inline-flex items-center text-blue-600 hover:text-blue-800"
       >
-        원본 링크
+        Original Article
         <ExternalLink className="ml-1 w-4 h-4" />
       </a>
     </div>

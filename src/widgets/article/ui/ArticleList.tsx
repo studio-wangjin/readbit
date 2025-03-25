@@ -13,9 +13,9 @@ export function ArticleList({ articles, onDelete }: ArticleListProps) {
   if (articles.length === 0) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-500 mb-4">아직 작성한 아티클이 없습니다.</p>
+        <p className="text-gray-500 mb-4">No articles yet</p>
         <Link href="/articles/create">
-          <Button>첫 아티클 작성하기</Button>
+          <Button>Create Your First Article</Button>
         </Link>
       </div>
     );
@@ -43,11 +43,11 @@ export function ArticleList({ articles, onDelete }: ArticleListProps) {
             <div className="flex space-x-2">
               <Link href={`/articles/${article.id}/edit`}>
                 <Button variant="outline" size="sm">
-                  수정
+                  Edit
                 </Button>
               </Link>
               <Button variant="destructive" size="sm" onClick={() => onDelete(article.id)}>
-                삭제
+                Delete
               </Button>
             </div>
           </div>
