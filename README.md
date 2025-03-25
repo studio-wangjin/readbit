@@ -2,6 +2,8 @@
 
 > Turn complex article into bite-sized learning for daily growth
 
+See [PRD (Product Requirements Document)](docs/prd-ko.md)
+
 ## Developers
 
 - milooy
