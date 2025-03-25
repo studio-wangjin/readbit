@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { createClient } from '@/src/shared/api/supabase/client';
 import { Button } from '@/src/shared/ui/button';
+import { supabase } from '@/src/shared/lib/supabase/browser';
 
 interface LogoutButtonProps {
   children?: React.ReactNode;
@@ -25,7 +25,6 @@ export function LogoutButton({
     setIsLoading(true);
 
     try {
-      const supabase = createClient();
       await supabase.auth.signOut();
 
       router.refresh();
