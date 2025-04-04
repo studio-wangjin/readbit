@@ -6,16 +6,19 @@ export interface Article {
   user_id: string;
   created_at: string;
   updated_at: string;
+  public: boolean;
 }
 
 export interface CreateArticleDto {
   title: string;
   content: string;
   link: string;
+  public: boolean;
 }
 
 export interface UpdateArticleDto {
   title?: string;
   content?: string;
   link?: string;
+  public?: boolean;
 }

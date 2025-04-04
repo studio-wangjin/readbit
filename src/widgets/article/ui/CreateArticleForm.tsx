@@ -1,107 +1,166 @@
+'use client';
+
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/src/shared/ui/form';
-import { Input } from '@/src/shared/ui/input';
 import { Button } from '@/src/shared/ui/button';
+import { Input } from '@/src/shared/ui/input';
+import { Label } from '@/src/shared/ui/label';
+import { Switch } from '@/src/shared/ui/switch';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/src/shared/ui/tabs';
 import { Textarea } from '@/src/shared/ui/textarea';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { CreateArticleDto } from '@/src/features/article/model/types';
 import { useCreateArticle } from '@/src/features/article/model/useCreateArticle';
 
-const formSchema = z.object({
-  title: z.string().min(1, '제목을 입력해주세요'),
-  content: z.string().min(1, '내용을 입력해주세요'),
-  link: z.string().url('올바른 URL을 입력해주세요'),
-});
+type InputMode = 'url' | 'manual';
 
 export function CreateArticleForm() {
   const router = useRouter();
   const { createArticle, isSubmitting } = useCreateArticle();
+  const [mode, setMode] = useState<InputMode>('url');
+  const [url, setUrl] = useState('');
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [manualUrl, setManualUrl] = useState('');
+  const [isPublic, setIsPublic] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const form = useForm<CreateArticleDto>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      title: '',
-      content: '',
-      link: '',
-    },
-  });
+  const handleUrlSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
 
-  const onSubmit = async (data: CreateArticleDto) => {
     try {
-      await createArticle(data);
+      const response = await fetch('/api/articles/scrape', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ url, isPublic }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error);
+      }
+
+      alert('아티클이 저장되었습니다');
+      setUrl('');
+      setIsPublic(false);
       router.push('/articles/my');
     } catch (error) {
-      console.error('Failed to create article:', error);
+      if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        alert('알 수 없는 오류가 발생했습니다');
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleManualSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      await createArticle({
+        title,
+        content,
+        link: manualUrl || '',
+        public: isPublic,
+      });
+
+      setTitle('');
+      setContent('');
+      setManualUrl('');
+      setIsPublic(false);
+      router.push('/articles/my');
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        alert('알 수 없는 오류가 발생했습니다');
+      }
     }
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <FormField
-          control={form.control}
-          name="title"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>제목</FormLabel>
-              <FormControl>
-                <Input placeholder="아티클 제목을 입력하세요" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+    <Tabs value={mode} onValueChange={value => setMode(value as InputMode)}>
+      <TabsList className="grid w-full grid-cols-2 mb-6">
+        <TabsTrigger value="url">URL로 추가하기</TabsTrigger>
+        <TabsTrigger value="manual">직접 입력하기</TabsTrigger>
+      </TabsList>
 
-        <FormField
-          control={form.control}
-          name="content"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>내용</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="아티클 내용을 입력하세요"
-                  className="min-h-[200px]"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+      <TabsContent value="url">
+        <form onSubmit={handleUrlSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="url">URL</Label>
+            <Input
+              id="url"
+              type="url"
+              placeholder="https://example.com/article"
+              value={url}
+              onChange={e => setUrl(e.target.value)}
+              required
+            />
+          </div>
 
-        <FormField
-          control={form.control}
-          name="link"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>링크</FormLabel>
-              <FormControl>
-                <Input placeholder="원본 아티클 링크를 입력하세요" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <div className="flex items-center space-x-2">
+            <Switch id="public-url" checked={isPublic} onCheckedChange={setIsPublic} />
+            <Label htmlFor="public-url">공개 여부</Label>
+          </div>
 
-        <div className="flex justify-end space-x-4">
-          <Button type="button" variant="outline" onClick={() => router.push('/articles')}>
-            취소
+          <Button type="submit" disabled={isLoading}>
+            {isLoading ? '저장 중...' : 'URL 저장하기'}
           </Button>
+        </form>
+      </TabsContent>
+
+      <TabsContent value="manual">
+        <form onSubmit={handleManualSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="title">제목</Label>
+            <Input
+              id="title"
+              type="text"
+              placeholder="아티클 제목을 입력하세요"
+              value={title}
+              onChange={e => setTitle(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="content">내용</Label>
+            <Textarea
+              id="content"
+              placeholder="아티클 내용을 입력하세요"
+              value={content}
+              onChange={e => setContent(e.target.value)}
+              className="min-h-[200px]"
+              required
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="manual-url">링크 (선택사항)</Label>
+            <Input
+              id="manual-url"
+              type="url"
+              placeholder="https://example.com/article"
+              value={manualUrl}
+              onChange={e => setManualUrl(e.target.value)}
+            />
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <Switch id="public-manual" checked={isPublic} onCheckedChange={setIsPublic} />
+            <Label htmlFor="public-manual">공개 여부</Label>
+          </div>
+
           <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? '저장 중...' : '저장'}
+            {isSubmitting ? '저장 중...' : '직접 저장하기'}
           </Button>
-        </div>
-      </form>
-    </Form>
+        </form>
+      </TabsContent>
+    </Tabs>
   );
 }
