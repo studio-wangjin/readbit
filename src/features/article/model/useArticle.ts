@@ -2,14 +2,14 @@ import { useState, useEffect } from 'react';
 import { Article } from './types';
 import { articleApi } from '../api/articleApi';
 
-export function useArticle(id: string) {
+export function useArticle({ slug }: { slug: string }) {
   const [article, setArticle] = useState<Article | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchArticle = async () => {
       try {
-        const data = await articleApi.getArticle(id);
+        const data = await articleApi.getArticleBySlug(slug);
         setArticle(data);
       } catch (error) {
         console.error('Failed to fetch article:', error);
@@ -19,7 +19,7 @@ export function useArticle(id: string) {
     };
 
     fetchArticle();
-  }, [id]);
+  }, [slug]);
 
   return { article, isLoading };
 }

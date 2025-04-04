@@ -7,6 +7,7 @@ export interface Article {
   created_at: string;
   updated_at: string;
   public: boolean;
+  slug: string;
 }
 
 export interface CreateArticleDto {
@@ -14,6 +15,7 @@ export interface CreateArticleDto {
   content: string;
   link: string;
   public: boolean;
+  slug?: string;
 }
 
 export interface UpdateArticleDto {
@@ -21,4 +23,5 @@ export interface UpdateArticleDto {
   content?: string;
   link?: string;
   public?: boolean;
+  slug?: string;
 }

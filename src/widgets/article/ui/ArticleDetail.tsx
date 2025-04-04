@@ -35,7 +35,7 @@ export function ArticleDetail({ article }: ArticleDetailProps) {
       </div>
 
       <div className="prose max-w-none mb-8">
-        <div className="whitespace-pre-wrap">{article.content}</div>
+        <div className="prose" dangerouslySetInnerHTML={{ __html: article.content }} />
       </div>
     </div>
   );
