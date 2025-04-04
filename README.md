@@ -73,3 +73,11 @@ function MyComponent() {
   );
 }
 ```
+
+## DX enhncemens
+
+### MCP
+
+We use [MCP](https://github.com/modelcontextprotocol/server) to sync data between Supabase and Cursor.
+
+Copy and paste `./.cursor/mcp.example.json` to `./.cursor/mcp.json` and fill in the values.
