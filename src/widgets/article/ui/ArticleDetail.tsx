@@ -34,9 +34,9 @@ export function ArticleDetail({ article }: ArticleDetailProps) {
         </div>
       </div>
 
-      <div className="prose max-w-none mb-8">
-        <div className="prose" dangerouslySetInnerHTML={{ __html: article.content }} />
-      </div>
+      <article className="prose lg:prose-xl">
+        <div dangerouslySetInnerHTML={{ __html: article.content }} />
+      </article>
     </div>
   );
 }
