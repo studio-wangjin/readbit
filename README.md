@@ -48,7 +48,7 @@ This project uses [Shadcn UI](https://ui.shadcn.com/) for components. We've inte
 
 ```sh
 # Add a new component
-$ npx shadcn-ui@latest add button
+$ npx shadcn@latest add button
 
 # This will add the component to src/shared/ui according to our FSD structure
 ```
