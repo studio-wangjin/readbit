@@ -43,3 +43,6 @@ next-env.d.ts
 
 # steiger cache
 .steiger_cache/
+
+# cursor
+.cursor/mcp.json
