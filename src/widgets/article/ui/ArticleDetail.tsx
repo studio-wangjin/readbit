@@ -28,7 +28,7 @@ export function ArticleDetail({ article }: ArticleDetailProps) {
           <Link href={`/articles/${article.id}/edit`}>
             <Button variant="outline">Edit</Button>
           </Link>
-          <Link href="/articles">
+          <Link href="/articles/my">
             <Button variant="outline">Back to List</Button>
           </Link>
         </div>

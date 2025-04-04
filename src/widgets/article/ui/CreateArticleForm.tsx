@@ -61,7 +61,7 @@ export function CreateArticleForm() {
     e.preventDefault();
 
     try {
-      await createArticle({
+      const article = await createArticle({
         title,
         content,
         link: manualUrl || '',
@@ -72,7 +72,7 @@ export function CreateArticleForm() {
       setContent('');
       setManualUrl('');
       setIsPublic(false);
-      router.push('/articles/my');
+      router.push(`/articles/${article.slug}`);
     } catch (error) {
       if (error instanceof Error) {
         alert(error.message);

@@ -4,6 +4,7 @@ import * as cheerio from 'cheerio';
 import { JSDOM } from 'jsdom';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
+import { ensureUniqueSlug } from '@/src/shared/lib/utils/slug';
 
 const schema = z.object({
   url: z.string().url('유효한 URL을 입력해주세요.'),
@@ -97,6 +98,17 @@ export async function POST(req: Request) {
     // 5. 콘텐츠 스크래핑
     const { title, content } = await fetchArticleContent(normalizedUrl);
 
+    // 5-1. slug 생성 및 중복 체크
+    const checkSlugExists = async (slug: string) => {
+      const { count } = await supabase
+        .from('articles')
+        .select('*', { count: 'exact', head: true })
+        .eq('slug', slug);
+      return count !== null && count > 0;
+    };
+
+    const slug = await ensureUniqueSlug(title, checkSlugExists);
+
     // 6. Supabase에 저장
     const { data: article, error: insertError } = await supabase
       .from('articles')
@@ -107,6 +119,7 @@ export async function POST(req: Request) {
           link: normalizedUrl,
           user_id: user.id,
           public: isPublic,
+          slug,
         },
       ])
       .select()
