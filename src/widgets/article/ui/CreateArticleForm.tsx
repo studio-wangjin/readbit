@@ -45,7 +45,7 @@ export function CreateArticleForm() {
       alert('아티클이 저장되었습니다');
       setUrl('');
       setIsPublic(false);
-      router.push('/articles/my');
+      router.push(`/articles/${data.data.slug}`);
     } catch (error) {
       if (error instanceof Error) {
         alert(error.message);
