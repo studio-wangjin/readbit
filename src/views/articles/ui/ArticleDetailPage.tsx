@@ -5,11 +5,11 @@ import { ArticleLink } from '@/src/widgets/article/ui/ArticleLink';
 import { useArticle } from '@/src/features/article/model/useArticle';
 
 interface ArticleDetailPageProps {
-  id: string;
+  slug: string;
 }
 
-export function ArticleDetailPage({ id }: ArticleDetailPageProps) {
-  const { article, isLoading } = useArticle(id);
+export function ArticleDetailPage({ slug }: ArticleDetailPageProps) {
+  const { article, isLoading } = useArticle({ slug });
 
   if (isLoading) {
     return <div className="container py-8">Loading...</div>;

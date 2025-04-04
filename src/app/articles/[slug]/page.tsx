@@ -2,10 +2,11 @@ import { ArticleDetailPage } from '@/src/views/articles/ui/ArticleDetailPage';
 
 interface ArticleDetailPageProps {
   params: {
-    id: string;
+    slug: string;
   };
 }
 
 export default function ArticleDetailPageRoute({ params }: ArticleDetailPageProps) {
-  return <ArticleDetailPage id={params.id} />;
+  console.log('params', params);
+  return <ArticleDetailPage slug={params.slug} />;
 }

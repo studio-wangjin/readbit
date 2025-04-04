@@ -28,15 +28,15 @@ export function ArticleDetail({ article }: ArticleDetailProps) {
           <Link href={`/articles/${article.id}/edit`}>
             <Button variant="outline">Edit</Button>
           </Link>
-          <Link href="/articles">
+          <Link href="/articles/my">
             <Button variant="outline">Back to List</Button>
           </Link>
         </div>
       </div>
 
-      <div className="prose max-w-none mb-8">
-        <div className="whitespace-pre-wrap">{article.content}</div>
-      </div>
+      <article className="prose lg:prose-xl">
+        <div dangerouslySetInnerHTML={{ __html: article.content }} />
+      </article>
     </div>
   );
 }
