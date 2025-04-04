@@ -41,7 +41,13 @@ export const articleApi = {
   },
 
   getArticleBySlug: async (slug: string): Promise<Article> => {
-    const { data, error } = await supabase.from('articles').select('*').eq('slug', slug).single();
+    const decodedSlug = decodeURIComponent(slug);
+
+    const { data, error } = await supabase
+      .from('articles')
+      .select('*')
+      .eq('slug', decodedSlug)
+      .single();
 
     if (error) throw error;
     if (!data) throw new Error('Article not found');
