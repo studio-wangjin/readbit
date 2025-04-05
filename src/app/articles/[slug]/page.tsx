@@ -1,12 +1,10 @@
 import { ArticleDetailPage } from '@/src/views/articles/ui/ArticleDetailPage';
 
-interface ArticleDetailPageProps {
-  params: {
-    slug: string;
-  };
-}
-
-export default function ArticleDetailPageRoute({ params }: ArticleDetailPageProps) {
-  console.log('params', params);
-  return <ArticleDetailPage slug={params.slug} />;
+export default async function ArticleDetailPageRoute({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  return <ArticleDetailPage slug={slug} />;
 }
