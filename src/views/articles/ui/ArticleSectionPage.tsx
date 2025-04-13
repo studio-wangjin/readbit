@@ -2,7 +2,7 @@
 
 import { parseArticleContent } from '@/src/features/article/lib/parseArticleContent';
 import { Article } from '@/src/features/article/model/types';
-import { ArticleChunkNavigation } from '@/src/widgets/article-chunk-navigation';
+import { ArticleSectionNavigation } from '@/src/widgets/article-section-navigation';
 import { ArticleSection } from '@/src/widgets/article-section';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -12,7 +12,7 @@ interface Props {
   article: Article;
 }
 
-export function ArticleChunkPage({ article }: Props) {
+export function ArticleSectionPage({ article }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const sections = parseArticleContent(article.content);
@@ -75,7 +75,7 @@ export function ArticleChunkPage({ article }: Props) {
         <ArticleSection title={currentSection.title} content={currentSection.content} />
       </div>
 
-      <ArticleChunkNavigation
+      <ArticleSectionNavigation
         currentIndex={currentSectionIndex}
         totalSections={sections.length}
         onPrevClick={handlePrevSection}
