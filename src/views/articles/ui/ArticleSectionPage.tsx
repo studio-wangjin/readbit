@@ -17,8 +17,8 @@ export function ArticleSectionPage({ article }: Props) {
   const searchParams = useSearchParams();
   const sections = parseArticleContent(article.content);
 
-  // URL의 section 파라미터를 읽어서 초기값 설정 (1-based to 0-based)
-  const initialSection = Math.max(1, Number(searchParams.get('section')) || 1) - 1;
+  // URL의 index 파라미터를 읽어서 초기값 설정 (1-based to 0-based)
+  const initialSection = Math.max(1, Number(searchParams.get('index')) || 1) - 1;
   const [currentSectionIndex, setCurrentSectionIndex] = useState(
     Math.min(initialSection, sections.length - 1)
   );
@@ -27,7 +27,7 @@ export function ArticleSectionPage({ article }: Props) {
   const updateUrlSection = useCallback(
     (sectionIndex: number) => {
       const params = new URLSearchParams(searchParams);
-      params.set('section', (sectionIndex + 1).toString());
+      params.set('index', (sectionIndex + 1).toString());
       router.push(`?${params.toString()}`, { scroll: false });
     },
     [router, searchParams]
@@ -51,7 +51,7 @@ export function ArticleSectionPage({ article }: Props) {
 
   // URL이 변경될 때 섹션 인덱스 업데이트 (1-based to 0-based)
   useEffect(() => {
-    const sectionFromUrl = Math.max(1, Number(searchParams.get('section')) || 1) - 1;
+    const sectionFromUrl = Math.max(1, Number(searchParams.get('index')) || 1) - 1;
     if (sectionFromUrl >= 0 && sectionFromUrl < sections.length) {
       setCurrentSectionIndex(sectionFromUrl);
     }

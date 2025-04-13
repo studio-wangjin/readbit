@@ -28,7 +28,7 @@ export function ArticleList({ articles, onDelete }: ArticleListProps) {
           <div className="flex justify-between items-start">
             <div>
               <Link
-                href={`/articles/section/${article.slug}`}
+                href={`/articles/${article.slug}/sections`}
                 className="text-lg font-semibold hover:text-blue-600"
               >
                 {article.title}

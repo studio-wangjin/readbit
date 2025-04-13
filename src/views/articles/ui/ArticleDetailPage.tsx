@@ -13,7 +13,7 @@ export function ArticleDetailPage({ article }: ArticleDetailPageProps) {
   return (
     <div className="container max-w-3xl py-8">
       <Link
-        href={`/articles/section/${article.slug}`}
+        href={`/articles/${article.slug}/sections`}
         className="text-blue-600 hover:text-blue-800 underline"
       >
         섹션별로 보기
