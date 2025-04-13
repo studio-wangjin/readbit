@@ -1,3 +1,5 @@
+'use client';
+
 export interface ArticleChunkNavigationProps {
   currentIndex: number;
   totalSections: number;
@@ -22,7 +24,7 @@ export function ArticleChunkNavigation({
           이전 섹션
         </button>
         <span className="text-gray-600">
-          {currentIndex + 1} / {totalSections}
+          섹션 {currentIndex + 1} / {totalSections}
         </span>
         <button
           onClick={onNextClick}
