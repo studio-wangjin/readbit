@@ -11,6 +11,27 @@ alwaysApply: true
 - **Organization**: Keep files under 300 lines, refactor when needed
 - **Documentation**: Create `/docs/[component].md` after major component development
 
+### Import Paths
+- Always include 'src' in import paths from project root
+  - Correct: '@/src/features/article/api/getArticleBySlug'
+  - Incorrect: '@/features/article/api/getArticleBySlug'
+- Use absolute imports with '@/' prefix for project files
+- Group imports by: external → internal → types
+- Keep consistent import order across files
+
+### Page & Component Organization (FSD)
+- Page routes go in `src/app` directory
+- Page components go in `src/views` directory following FSD structure
+  - Correct: '@/src/views/articles/ui/ArticleDetailPage'
+  - Incorrect: Creating page components directly in `src/app`
+- Follow FSD layer hierarchy:
+  - views/ - Route pages and layouts
+  - widgets/ - Independent page blocks
+  - features/ - User interactions and business logic
+  - entities/ - Business entities
+  - shared/ - Reusable infrastructure and UI
+- Keep page components thin, delegate business logic to features layer
+
 ### Code Structure
 - Use functional, declarative programming (avoid classes)
 - Favor composition over inheritance

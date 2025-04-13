@@ -1,3 +1,5 @@
+'use client';
+
 import { supabase } from '@/src/shared/lib/supabase/browser';
 import { Article, CreateArticleDto, UpdateArticleDto } from '../model/types';
 import { ensureUniqueSlug } from '@/src/shared/lib/utils/slug';
