@@ -1,5 +1,3 @@
-'use client';
-
 export interface ArticleChunkNavigationProps {
   currentIndex: number;
   totalSections: number;

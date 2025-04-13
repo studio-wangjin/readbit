@@ -30,8 +30,14 @@ export function ArticleChunkPage({ article }: Props) {
       >
         한번에 보기
       </Link>
+      <ArticleChunkNavigation
+        currentIndex={currentSectionIndex}
+        totalSections={sections.length}
+        onPrevClick={handlePrevSection}
+        onNextClick={handleNextSection}
+      />
       <h1 className="text-3xl font-bold mb-8">{article.title}</h1>
-
+      {/* TODO:html 파싱이 hydration error를 유발해서 sections.map 하단에 있는 컴포넌트들은 모두 hydration 에러로 잘못 잡힘. parsing에러를 isomorphic하게 수정해야하는데 일단 노운이슈로 둠.  */}
       <div className="space-y-12">
         {sections.map(section => (
           <section key={section.index} className="bg-white rounded-lg shadow-md p-6">
@@ -48,13 +54,6 @@ export function ArticleChunkPage({ article }: Props) {
           </section>
         ))}
       </div>
-
-      <ArticleChunkNavigation
-        currentIndex={currentSectionIndex}
-        totalSections={sections.length}
-        onPrevClick={handlePrevSection}
-        onNextClick={handleNextSection}
-      />
     </div>
   );
 }
