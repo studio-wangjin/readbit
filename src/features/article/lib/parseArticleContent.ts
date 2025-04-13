@@ -10,7 +10,7 @@ export const parseArticleContent = (content: string): ArticleSection[] => {
   if (parts[0].trim()) {
     sections.push({
       index: 0,
-      title: '소개',
+      title: 'Intro',
       content: [parts[0].trim()],
     });
   }

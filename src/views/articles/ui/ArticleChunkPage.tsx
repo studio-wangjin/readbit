@@ -2,7 +2,9 @@
 
 import { parseArticleContent } from '@/src/features/article/lib/parseArticleContent';
 import { Article } from '@/src/features/article/model/types';
+import { ArticleChunkNavigation } from '@/src/widgets/article-chunk-navigation';
 import Link from 'next/link';
+import { useCallback, useState } from 'react';
 
 interface Props {
   article: Article;
@@ -10,9 +12,18 @@ interface Props {
 
 export function ArticleChunkPage({ article }: Props) {
   const sections = parseArticleContent(article.content);
+  const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
+
+  const handlePrevSection = useCallback(() => {
+    setCurrentSectionIndex(prev => Math.max(0, prev - 1));
+  }, []);
+
+  const handleNextSection = useCallback(() => {
+    setCurrentSectionIndex(prev => Math.min(sections.length - 1, prev + 1));
+  }, [sections.length]);
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 pb-24 relative min-h-screen">
       <Link
         href={`/articles/${article.slug}`}
         className="text-blue-600 hover:text-blue-800 underline"
@@ -37,6 +48,13 @@ export function ArticleChunkPage({ article }: Props) {
           </section>
         ))}
       </div>
+
+      <ArticleChunkNavigation
+        currentIndex={currentSectionIndex}
+        totalSections={sections.length}
+        onPrevClick={handlePrevSection}
+        onNextClick={handleNextSection}
+      />
     </div>
   );
 }
