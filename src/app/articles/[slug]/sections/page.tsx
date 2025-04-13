@@ -1,8 +1,8 @@
 import { getArticleBySlugServerSide } from '@/src/features/article/api/serverSideArticleApi';
-import { ArticleChunkPage } from '@/src/views/articles/ui/ArticleChunkPage';
+import { ArticleSectionPage } from '@/src/views/articles/ui/ArticleSectionPage';
 import { notFound } from 'next/navigation';
 
-export default async function ArticleChunkPageRoute({
+export default async function ArticleSectionPageRoute({
   params,
 }: {
   params: Promise<{ slug: string }>;
@@ -14,5 +14,5 @@ export default async function ArticleChunkPageRoute({
     notFound();
   }
 
-  return <ArticleChunkPage article={article} />;
+  return <ArticleSectionPage article={article} />;
 }
