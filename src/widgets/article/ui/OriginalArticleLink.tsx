@@ -1,15 +1,10 @@
 import { ExternalLink } from 'lucide-react';
-import { Article } from '@/src/features/article/model/types';
 
-interface ArticleLinkProps {
-  article: Article;
-}
-
-export function ArticleLink({ article }: ArticleLinkProps) {
+export function OriginalArticleLink({ link }: { link: string }) {
   return (
     <div className="border-t pt-4">
       <a
-        href={article.link}
+        href={link}
         target="_blank"
         rel="noopener noreferrer"
         className="inline-flex items-center text-blue-600 hover:text-blue-800"

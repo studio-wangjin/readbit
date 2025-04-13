@@ -2,7 +2,7 @@
 
 import { Article } from '@/src/features/article/model/types';
 import { ArticleDetail } from '@/src/widgets/article/ui/ArticleDetail';
-import { ArticleLink } from '@/src/widgets/article/ui/ArticleLink';
+import { OriginalArticleLink } from '@/src/widgets/article/ui/OriginalArticleLink';
 import Link from 'next/link';
 
 interface ArticleDetailPageProps {
@@ -19,7 +19,7 @@ export function ArticleDetailPage({ article }: ArticleDetailPageProps) {
         섹션별로 보기
       </Link>
       <ArticleDetail article={article} />
-      <ArticleLink article={article} />
+      <OriginalArticleLink link={article.link} />
     </div>
   );
 }

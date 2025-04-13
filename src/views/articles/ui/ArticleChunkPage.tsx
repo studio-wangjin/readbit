@@ -2,6 +2,7 @@
 
 import { parseArticleContent } from '@/src/features/article/lib/parseArticleContent';
 import { Article } from '@/src/features/article/model/types';
+import Link from 'next/link';
 
 interface Props {
   article: Article;
@@ -12,6 +13,12 @@ export function ArticleChunkPage({ article }: Props) {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <Link
+        href={`/articles/${article.slug}`}
+        className="text-blue-600 hover:text-blue-800 underline"
+      >
+        한번에 보기
+      </Link>
       <h1 className="text-3xl font-bold mb-8">{article.title}</h1>
 
       <div className="space-y-12">
