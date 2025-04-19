@@ -15,7 +15,7 @@ interface Props {
 export function ArticleSectionPage({ article }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const sections = parseArticleContent(article.content);
+  const sections = parseArticleContent(article.content, article.link);
 
   // URL의 index 파라미터를 읽어서 초기값 설정 (1-based to 0-based)
   const initialSection = Math.max(1, Number(searchParams.get('index')) || 1) - 1;

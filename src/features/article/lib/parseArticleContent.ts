@@ -1,38 +1,29 @@
 import { ArticleSection } from '../types/article';
+import { convertToAbsoluteImageUrls } from './convertToAbsoluteImageUrls';
+import { splitHtmlIntoSections } from './splitHtmlIntoSections';
 
-export const parseArticleContent = (content: string): ArticleSection[] => {
-  const sections: ArticleSection[] = [];
+export const parseArticleContent = (content: string, sourceUrl?: string): ArticleSection[] => {
+  // 1. HTML을 섹션으로 파싱
+  const sections = splitHtmlIntoSections(content);
 
-  // HTML 문자열을 h2 태그로 분할
-  const parts = content.split(/<h2[^>]*>/i);
-
-  // 첫 번째 부분은 소개 섹션
-  if (parts[0].trim()) {
-    sections.push({
-      index: 0,
-      title: 'Intro',
-      content: [parts[0].trim()],
-    });
+  // 2. sourceUrl이 없으면 파싱된 섹션 그대로 반환
+  if (!sourceUrl) {
+    return sections;
   }
 
-  // 나머지 부분들을 섹션으로 처리
-  for (let i = 1; i < parts.length; i++) {
-    const part = parts[i];
-    // h2 태그 닫는 부분까지의 텍스트를 제목으로 추출
-    const titleMatch = part.match(/(.*?)<\/h2>/i);
-    if (!titleMatch) continue;
-
-    const title = titleMatch[1].trim();
-    const content = [part.replace(/(.*?)<\/h2>/i, '').trim()];
-
-    if (content[0]) {
-      sections.push({
-        index: sections.length,
-        title: title || 'Untitled Section',
-        content,
-      });
-    }
+  // 3. baseUrl 추출
+  let baseUrl = '';
+  try {
+    const url = new URL(sourceUrl);
+    baseUrl = `${url.protocol}//${url.host}`;
+  } catch (e) {
+    console.error('Invalid source URL:', e);
+    return sections;
   }
 
-  return sections;
+  // 4. 각 섹션의 컨텐츠에 대해 이미지 URL 변환
+  return sections.map(section => ({
+    ...section,
+    content: section.content.map(html => convertToAbsoluteImageUrls(html, baseUrl)),
+  }));
 };
