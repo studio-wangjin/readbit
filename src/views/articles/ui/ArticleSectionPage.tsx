@@ -72,6 +72,7 @@ export function ArticleSectionPage({ article }: Props) {
               articleId: article.id,
               sectionIndex: currentSectionIndex,
               note,
+              isNotePublic: true,
             });
             handleSectionChange(currentSectionIndex + 1);
           } catch (err) {
