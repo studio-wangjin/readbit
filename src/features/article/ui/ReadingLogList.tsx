@@ -6,6 +6,7 @@ import { ko } from 'date-fns/locale';
 import { articleQueries } from '../model/queries';
 import { ReadingLogsByDate } from '../model/types';
 import { ReadingLogGroup } from '@/src/widgets/reading-log/ui/ReadingLogGroup';
+import { ReadingContributionGraph } from '@/src/widgets/reading-log/ui/ReadingContributionGraph';
 
 export function ReadingLogList() {
   const { data: logs, isLoading } = useQuery(articleQueries.readingLog());
@@ -30,6 +31,7 @@ export function ReadingLogList() {
 
   return (
     <div className="space-y-8">
+      <ReadingContributionGraph logs={logs} />
       {Object.entries(groupedLogs).map(([date, logs]) => (
         <ReadingLogGroup key={date} date={date} logs={logs} />
       ))}
