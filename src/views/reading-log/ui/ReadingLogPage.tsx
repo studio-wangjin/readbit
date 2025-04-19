@@ -5,7 +5,7 @@ import { Suspense } from 'react';
 export function ReadingLogPage() {
   return (
     <FullPageCentered>
-      <h1 className="text-2xl font-bold mb-8">독서 기록</h1>
+      <h1 className="text-2xl font-bold mb-8">Reading log</h1>
       <Suspense fallback={<div>Loading...</div>}>
         <ReadingLogList />
       </Suspense>
