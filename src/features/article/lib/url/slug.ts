@@ -1,8 +1,8 @@
 /**
- * 제목으로부터 URL에 사용할 수 있는 slug를 생성합니다.
+ * 아티클 제목으로부터 URL에 사용할 수 있는 slug를 생성합니다.
  * 한글은 그대로 유지하고, 공백은 하이픈으로 변환합니다.
  */
-export function generateSlug(title: string): string {
+function generateSlug(title: string): string {
   // 1. 공백을 하이픈으로 변환
   const base = title
     .trim()
@@ -21,7 +21,7 @@ export function generateSlug(title: string): string {
 }
 
 /**
- * 주어진 slug가 이미 존재하는지 확인하고,
+ * 주어진 아티클 slug가 이미 존재하는지 확인하고,
  * 존재한다면 새로운 slug를 생성합니다.
  */
 export async function ensureUniqueSlug(

@@ -1,4 +1,4 @@
-import { ArticleSection } from '../types/article';
+import { ArticleSection } from '../../types/article';
 
 /**
  * HTML 문자열을 h2 태그를 기준으로 섹션으로 분할합니다.

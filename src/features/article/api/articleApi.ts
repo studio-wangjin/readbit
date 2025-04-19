@@ -2,7 +2,7 @@
 
 import { supabase } from '@/src/shared/lib/supabase/browser';
 import { Article, CreateArticleDto, UpdateArticleDto } from '../model/types';
-import { ensureUniqueSlug } from '@/src/shared/lib/utils/slug';
+import { ensureUniqueSlug } from '../lib/url/slug';
 
 export const articleApi = {
   // 아티클 목록 조회

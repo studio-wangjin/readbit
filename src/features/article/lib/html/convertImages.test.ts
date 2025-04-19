@@ -1,4 +1,4 @@
-import { convertToAbsoluteImageUrls } from './convertToAbsoluteImageUrls';
+import { convertToAbsoluteImageUrls } from './convertImages';
 
 describe('convertToAbsoluteImageUrls', () => {
   const baseUrl = 'https://example.com';

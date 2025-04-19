@@ -1,12 +1,12 @@
 'use client';
 
-import { parseArticleContent } from '@/src/features/article/lib/parseArticleContent';
 import { Article } from '@/src/features/article/model/types';
 import { ArticleSectionNavigation } from '@/src/widgets/article-section-navigation';
 import { ArticleSection } from '@/src/widgets/article-section';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
+import { parseArticleContent } from '@/src/features/article/lib';
 
 interface Props {
   article: Article;
@@ -15,7 +15,7 @@ interface Props {
 export function ArticleSectionPage({ article }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const sections = parseArticleContent(article.content, article.link);
+  const sections = parseArticleContent(article.content, { sourceUrl: article.link });
 
   // URL의 index 파라미터를 읽어서 초기값 설정 (1-based to 0-based)
   const initialSection = Math.max(1, Number(searchParams.get('index')) || 1) - 1;

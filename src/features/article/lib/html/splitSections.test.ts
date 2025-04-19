@@ -1,4 +1,4 @@
-import { splitHtmlIntoSections } from './splitHtmlIntoSections';
+import { splitHtmlIntoSections } from './splitSections';
 
 describe('splitHtmlIntoSections', () => {
   it('h2 태그가 없는 HTML을 하나의 Intro 섹션으로 처리해야 함', () => {
