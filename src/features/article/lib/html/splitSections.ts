@@ -1,10 +1,18 @@
-import { ArticleSection } from '../types/article';
+import { ArticleSection } from '../../types/article';
+import { extractTextFromHtml } from './extractText';
 
-export const parseArticleContent = (content: string): ArticleSection[] => {
+/**
+ * HTML 문자열을 h2 태그를 기준으로 섹션으로 분할합니다.
+ * 첫 번째 h2 태그 이전의 내용은 'Intro' 섹션으로 처리됩니다.
+ *
+ * @param html HTML 문자열
+ * @returns 섹션 배열
+ */
+export const splitHtmlIntoSections = (html: string): ArticleSection[] => {
   const sections: ArticleSection[] = [];
 
   // HTML 문자열을 h2 태그로 분할
-  const parts = content.split(/<h2[^>]*>/i);
+  const parts = html.split(/<h2[^>]*>/i);
 
   // 첫 번째 부분은 소개 섹션
   if (parts[0].trim()) {
@@ -22,7 +30,8 @@ export const parseArticleContent = (content: string): ArticleSection[] => {
     const titleMatch = part.match(/(.*?)<\/h2>/i);
     if (!titleMatch) continue;
 
-    const title = titleMatch[1].trim();
+    // h2 태그 내용에서 순수 텍스트만 추출
+    const title = extractTextFromHtml(titleMatch[1]).trim();
     const content = [part.replace(/(.*?)<\/h2>/i, '').trim()];
 
     if (content[0]) {

@@ -4,7 +4,7 @@ import * as cheerio from 'cheerio';
 import { JSDOM } from 'jsdom';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { ensureUniqueSlug } from '@/src/shared/lib/utils/slug';
+import { ensureUniqueSlug } from '@/src/features/article/lib/slug';
 
 const schema = z.object({
   url: z.string().url('유효한 URL을 입력해주세요.'),
