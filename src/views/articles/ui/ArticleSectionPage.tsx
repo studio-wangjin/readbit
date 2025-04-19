@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { parseArticleContent } from '@/src/features/article/lib';
+import { articleApi } from '@/src/features/article/api/articleApi';
 
 interface Props {
   article: Article;
@@ -24,30 +25,15 @@ export function ArticleSectionPage({ article }: Props) {
   );
 
   // URL 업데이트 함수 (0-based to 1-based)
-  const updateUrlSection = useCallback(
+  const handleSectionChange = useCallback(
     (sectionIndex: number) => {
+      setCurrentSectionIndex(sectionIndex);
       const params = new URLSearchParams(searchParams);
       params.set('index', (sectionIndex + 1).toString());
       router.push(`?${params.toString()}`, { scroll: false });
     },
     [router, searchParams]
   );
-
-  const handlePrevSection = useCallback(() => {
-    setCurrentSectionIndex(prev => {
-      const newIndex = Math.max(0, prev - 1);
-      updateUrlSection(newIndex);
-      return newIndex;
-    });
-  }, [updateUrlSection]);
-
-  const handleNextSection = useCallback(() => {
-    setCurrentSectionIndex(prev => {
-      const newIndex = Math.min(sections.length - 1, prev + 1);
-      updateUrlSection(newIndex);
-      return newIndex;
-    });
-  }, [sections.length, updateUrlSection]);
 
   // URL이 변경될 때 섹션 인덱스 업데이트 (1-based to 0-based)
   useEffect(() => {
@@ -60,7 +46,7 @@ export function ArticleSectionPage({ article }: Props) {
   const currentSection = sections[currentSectionIndex];
 
   return (
-    <div className="container mx-auto px-4 py-8 pb-24 relative min-h-screen">
+    <div className="container mx-auto px-4 py-8 pb-[calc(2rem+12rem)] relative min-h-screen">
       <div className="flex justify-between items-center mb-8">
         <Link
           href={`/articles/${article.slug}`}
@@ -76,10 +62,22 @@ export function ArticleSectionPage({ article }: Props) {
       </div>
 
       <ArticleSectionNavigation
-        currentIndex={currentSectionIndex}
-        totalSections={sections.length}
-        onPrevClick={handlePrevSection}
-        onNextClick={handleNextSection}
+        sectionInfo={{
+          currentIndex: currentSectionIndex,
+          totalCount: sections.length,
+        }}
+        onSubmit={async (note: string) => {
+          try {
+            await articleApi.saveReadingProgress({
+              articleId: article.id,
+              sectionIndex: currentSectionIndex,
+              note,
+            });
+            handleSectionChange(currentSectionIndex + 1);
+          } catch (err) {
+            console.error('Failed to save note:', err);
+          }
+        }}
       />
     </div>
   );

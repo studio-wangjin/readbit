@@ -3,6 +3,7 @@
 import { supabase } from '@/src/shared/lib/supabase/browser';
 import { Article, CreateArticleDto, UpdateArticleDto } from '../model/types';
 import { ensureUniqueSlug } from '../lib/url/slug';
+import { ArticleReadingProgress } from '../types/articleReadingProgress';
 
 export const articleApi = {
   // 아티클 목록 조회
@@ -138,5 +139,63 @@ export const articleApi = {
     const { error } = await supabase.from('articles').delete().eq('id', id).eq('user_id', user.id);
 
     if (error) throw error;
+  },
+
+  // 독서 진행상황 저장
+  saveReadingProgress: async (data: {
+    articleId: string;
+    sectionIndex: number;
+    note: string;
+    isNotePublic?: boolean;
+  }): Promise<void> => {
+    const { error } = await supabase.from('article_reading_progress').upsert({
+      article_id: data.articleId,
+      section_index: data.sectionIndex,
+      note: data.note,
+      is_note_public: data.isNotePublic ?? true,
+    });
+
+    if (error) throw error;
+  },
+
+  // 아티클의 독서 진행상황 조회
+  getReadingProgress: async (articleId: string): Promise<ArticleReadingProgress[]> => {
+    const { data, error } = await supabase
+      .from('article_reading_progress')
+      .select('*')
+      .eq('article_id', articleId)
+      .order('section_index', { ascending: true });
+
+    if (error) throw error;
+    return data as ArticleReadingProgress[];
+  },
+
+  // 내 독서 진행상황 조회
+  getMyReadingProgress: async (): Promise<ArticleReadingProgress[]> => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) throw new Error('User not authenticated');
+
+    const { data, error } = await supabase
+      .from('article_reading_progress')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    return data as ArticleReadingProgress[];
+  },
+
+  // 특정 유저의 독서 진행상황 조회 (노트 내용은 public인 것만)
+  getUserReadingProgress: async (userId: string): Promise<ArticleReadingProgress[]> => {
+    const { data, error } = await supabase
+      .from('article_reading_progress')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    return data as ArticleReadingProgress[];
   },
 };

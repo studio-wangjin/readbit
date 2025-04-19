@@ -69,6 +69,7 @@ export interface Database {
           content: string;
           link: string;
           user_id: string;
+          slug: string;
         };
         Insert: {
           id?: string;
@@ -77,6 +78,7 @@ export interface Database {
           content: string;
           link: string;
           user_id: string;
+          slug?: string;
         };
         Update: {
           id?: string;
@@ -85,12 +87,56 @@ export interface Database {
           content?: string;
           link?: string;
           user_id?: string;
+          slug?: string;
         };
         Relationships: [
           {
             foreignKeyName: 'articles_user_id_fkey';
             columns: ['user_id'];
             referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      article_reading_progress: {
+        Row: {
+          id: string;
+          user_id: string;
+          article_id: string;
+          section_index: number;
+          note: string;
+          is_note_public: boolean;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id?: string;
+          article_id: string;
+          section_index: number;
+          note: string;
+          is_note_public?: boolean;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          article_id?: string;
+          section_index?: number;
+          note?: string;
+          is_note_public?: boolean;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'article_reading_progress_user_id_fkey';
+            columns: ['user_id'];
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'article_reading_progress_article_id_fkey';
+            columns: ['article_id'];
+            referencedRelation: 'articles';
             referencedColumns: ['id'];
           },
         ];

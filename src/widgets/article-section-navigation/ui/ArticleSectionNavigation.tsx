@@ -1,38 +1,41 @@
 'use client';
 
-interface Props {
-  currentIndex: number;
-  totalSections: number;
-  onPrevClick: () => void;
-  onNextClick: () => void;
+import { SectionNoteInput } from '@/src/features/article/ui/SectionNoteInput';
+import { useLoading } from '@/src/shared/lib/hooks/useLoading';
+import { useState } from 'react';
+
+interface ArticleSectionNavigationProps {
+  sectionInfo: {
+    currentIndex: number;
+    totalCount: number;
+  };
+  onSubmit: (note: string) => Promise<void>;
 }
 
-export function ArticleSectionNavigation({
-  currentIndex,
-  totalSections,
-  onPrevClick,
-  onNextClick,
-}: Props) {
+export function ArticleSectionNavigation({ sectionInfo, onSubmit }: ArticleSectionNavigationProps) {
+  const [note, setNote] = useState('');
+  const [loading, startTransition] = useLoading();
+
+  const handleSubmit = async () => {
+    await onSubmit(note);
+    setNote(''); // 완료 후 노트 초기화
+  };
+
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4">
-      <div className="container mx-auto flex justify-between items-center">
-        <button
-          onClick={onPrevClick}
-          disabled={currentIndex === 0}
-          className="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300"
-        >
-          이전
-        </button>
-        <div className="text-gray-600">
-          섹션 {currentIndex + 1} / {totalSections}
+      <div className="container mx-auto max-w-4xl space-y-4">
+        <div className="flex items-center justify-between text-sm text-muted-foreground">
+          <div>
+            섹션 {sectionInfo.currentIndex + 1} / {sectionInfo.totalCount}
+          </div>
         </div>
-        <button
-          onClick={onNextClick}
-          disabled={currentIndex === totalSections - 1}
-          className="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300"
-        >
-          다음
-        </button>
+
+        <SectionNoteInput
+          value={note}
+          onChange={setNote}
+          onSubmit={() => startTransition(handleSubmit())}
+          isLoading={loading}
+        />
       </div>
     </div>
   );
