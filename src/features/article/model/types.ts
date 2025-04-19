@@ -1,3 +1,5 @@
+import { Database } from '@/src/shared/types/supabase';
+
 export interface Article {
   id: string;
   title: string;
@@ -25,3 +27,11 @@ export interface UpdateArticleDto {
   public?: boolean;
   slug?: string;
 }
+
+export type ReadingLog = Database['public']['Tables']['article_reading_progress']['Row'] & {
+  article_title: string;
+};
+
+export type ReadingLogsByDate = {
+  [date: string]: ReadingLog[];
+};
