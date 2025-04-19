@@ -141,19 +141,40 @@ export const articleApi = {
     if (error) throw error;
   },
 
-  // 독서 진행상황 저장
+  // 특정 섹션의 노트 조회
+  getSectionNote: async (
+    articleId: string,
+    sectionIndex: number
+  ): Promise<ArticleReadingProgress | null> => {
+    const { data, error } = await supabase
+      .from('article_reading_progress')
+      .select('*')
+      .eq('article_id', articleId)
+      .eq('section_index', sectionIndex)
+      .maybeSingle();
+
+    if (error) throw error;
+    return data;
+  },
+
+  // 독서 진행상황 저장 (upsert)
   saveReadingProgress: async (data: {
     articleId: string;
     sectionIndex: number;
     note: string;
     isNotePublic?: boolean;
   }): Promise<void> => {
-    const { error } = await supabase.from('article_reading_progress').upsert({
-      article_id: data.articleId,
-      section_index: data.sectionIndex,
-      note: data.note,
-      is_note_public: data.isNotePublic ?? true,
-    });
+    const { error } = await supabase.from('article_reading_progress').upsert(
+      {
+        article_id: data.articleId,
+        section_index: data.sectionIndex,
+        note: data.note,
+        is_note_public: data.isNotePublic ?? true,
+      },
+      {
+        onConflict: 'article_id,section_index,user_id',
+      }
+    );
 
     if (error) throw error;
   },

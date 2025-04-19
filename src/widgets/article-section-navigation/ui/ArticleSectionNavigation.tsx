@@ -2,23 +2,41 @@
 
 import { SectionNoteInput } from '@/src/features/article/ui/SectionNoteInput';
 import { useLoading } from '@/src/shared/lib/hooks/useLoading';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { articleQueries } from '@/src/features/article/model/queries';
 
 interface ArticleSectionNavigationProps {
   sectionInfo: {
     currentIndex: number;
     totalCount: number;
   };
+  articleId: string;
   onSubmit: (note: string) => Promise<void>;
 }
 
-export function ArticleSectionNavigation({ sectionInfo, onSubmit }: ArticleSectionNavigationProps) {
+export function ArticleSectionNavigation({
+  sectionInfo,
+  articleId,
+  onSubmit,
+}: ArticleSectionNavigationProps) {
   const [note, setNote] = useState('');
   const [loading, startTransition] = useLoading();
 
+  const { data: noteFromServer } = useQuery(
+    articleQueries.sectionNote({ articleId, sectionIndex: sectionInfo.currentIndex })
+  );
+
+  useEffect(() => {
+    if (noteFromServer) {
+      setNote(noteFromServer.note);
+    } else {
+      setNote('');
+    }
+  }, [noteFromServer]);
+
   const handleSubmit = async () => {
     await onSubmit(note);
-    setNote(''); // 완료 후 노트 초기화
   };
 
   return (

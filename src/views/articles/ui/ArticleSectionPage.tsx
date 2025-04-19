@@ -1,13 +1,13 @@
 'use client';
 
+import { articleApi } from '@/src/features/article/api/articleApi';
+import { parseArticleContent } from '@/src/features/article/lib';
 import { Article } from '@/src/features/article/model/types';
-import { ArticleSectionNavigation } from '@/src/widgets/article-section-navigation';
 import { ArticleSection } from '@/src/widgets/article-section';
+import { ArticleSectionNavigation } from '@/src/widgets/article-section-navigation';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
-import { parseArticleContent } from '@/src/features/article/lib';
-import { articleApi } from '@/src/features/article/api/articleApi';
 
 interface Props {
   article: Article;
@@ -66,6 +66,7 @@ export function ArticleSectionPage({ article }: Props) {
           currentIndex: currentSectionIndex,
           totalCount: sections.length,
         }}
+        articleId={article.id}
         onSubmit={async (note: string) => {
           try {
             await articleApi.saveReadingProgress({
