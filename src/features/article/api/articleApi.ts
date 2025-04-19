@@ -1,11 +1,15 @@
 'use client';
 
 import { supabase } from '@/src/shared/lib/supabase/browser';
-import { Article, CreateArticleDto, UpdateArticleDto } from '../model/types';
+import { Article, CreateArticleDto, UpdateArticleDto, ReadingLog } from '../model/types';
 import { ensureUniqueSlug } from '../lib/url/slug';
 import { ArticleReadingProgress } from '../types/articleReadingProgress';
 
 export const articleApi = {
+  getCurrentUser: async () => {
+    return await supabase.auth.getUser();
+  },
+
   // 아티클 목록 조회
   getArticles: async (): Promise<Article[]> => {
     const { data, error } = await supabase
@@ -218,5 +222,35 @@ export const articleApi = {
 
     if (error) throw error;
     return data as ArticleReadingProgress[];
+  },
+
+  getReadingLogs: async (userId?: string): Promise<ReadingLog[]> => {
+    if (!userId) {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) throw new Error('User not authenticated');
+      userId = user.id;
+    }
+
+    const { data, error } = await supabase
+      .from('article_reading_progress')
+      .select(
+        `
+        *,
+        article:articles(title)
+      `
+      )
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      throw error;
+    }
+
+    return data.map(log => ({
+      ...log,
+      article_title: log.article.title,
+    }));
   },
 };

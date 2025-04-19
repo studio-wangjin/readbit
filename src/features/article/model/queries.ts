@@ -5,4 +5,8 @@ export const articleQueries = {
     queryKey: [...Object.values(options), 'articleQueries.sectionNote'],
     queryFn: () => articleApi.getSectionNote(options.articleId, options.sectionIndex),
   }),
+  readingLog: () => ({
+    queryKey: ['article', 'reading-log'],
+    queryFn: () => articleApi.getReadingLogs(),
+  }),
 } as const;
