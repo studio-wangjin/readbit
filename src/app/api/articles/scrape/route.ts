@@ -1,10 +1,10 @@
+import { ensureUniqueSlug } from '@/src/features/article/lib';
 import { createServerSupabaseClient } from '@/src/shared/lib/supabase/server';
 import { Readability } from '@mozilla/readability';
 import * as cheerio from 'cheerio';
 import { JSDOM } from 'jsdom';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { ensureUniqueSlug } from '@/src/features/article/lib/slug';
 
 const schema = z.object({
   url: z.string().url('유효한 URL을 입력해주세요.'),
