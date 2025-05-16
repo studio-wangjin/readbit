@@ -5,19 +5,24 @@ https://feature-sliced.github.io/documentation/kr/docs/get-started/overview
 
 ## 레이어 구조
 
-```
-src/
-├── app/         - 애플리케이션 초기화 및 라우팅 (Next.js App Router)
-├── pages/       - 페이지 컴포넌트 (페이지 구성 및 레이아웃)
-├── widgets/     - 독립적인 페이지 블록, 여러 feature의 통합
-├── features/    - 사용자 상호작용 및 비즈니스 로직
-├── entities/    - 비즈니스 엔티티 (사용자, 상품 등)
-├── shared/      - 재사용 가능한 인프라, UI, 라이브러리
-└── middleware.ts - Next.js 미들웨어
-```
+- `app`: 애플리케이션 초기화 및 라우팅 (Next.js App Router)
+- `views`: 페이지 컴포넌트 (페이지 구성 및 레이아웃)
+- `widgets`: 여러 feature/entitie의 통합. 페이지의 한 영역을 구성. 상태/로직은 최소화 (e.g. ArticleList)
+- `features`: 사용자 행동/시나리오. (e.g. AddToCartButton, CreateCommentForm)
+- `entities`: 비즈니스의 '명사'역할. 데이터 구조 그 자체. 실제 세상에 존재하는 것. (e.g. User, Article)
+- `shared`: 재사용 가능한 인프라, UI, 라이브러리
+- `middleware.ts`: Next.js 미들웨어
+
+### widget이랑 feature의 차이점
+
+"이게 여러 개를 묶은 섹션/영역인가?" → widget
+"이게 단일 액션/기능인가?" → feature
+
+### Slice
 
 최상위 레이어 하부에는 Slices라는 서브 디렉토리를 가집니다. '가치'를 기준으로 묶입니다.
 e.g.
+
 ```
 widgets/
    ├── newsfeed/
@@ -25,7 +30,10 @@ widgets/
    └── footer/
 ```
 
+### Segment
+
 Slice는 Segment로 구성됩니다. '목적'기반으로 묶입니다.
+
 ```
 - api: 서버 요청
 - UI: Slice의 UI 컴포넌트
@@ -40,6 +48,7 @@ Slice는 Segment로 구성됩니다. '목적'기반으로 묶입니다.
 ### 🌐 app/
 
 애플리케이션 초기화, 라우팅, 기본 레이아웃을 담당합니다. Next.js App Router 구조를 따릅니다. 실제 페이지 컴포넌트 구현은 pages/ 레이어에 있습니다.
+
 - auth
   - sign-in/
     - `page.tsx`: 로그인 페이지
@@ -52,10 +61,10 @@ Slice는 Segment로 구성됩니다. '목적'기반으로 묶입니다.
 - `page.tsx`: 비로그인 유저의 랜딩 페이지
 
 ```tsx
-import { FeedPage } from "pages/feed";
+import { FeedPage } from 'pages/feed';
 
 export const meta: MetaFunction = () => {
-  return [{ title: "Conduit" }];
+  return [{ title: 'Conduit' }];
 };
 
 export default FeedPage;
@@ -65,6 +74,7 @@ export default FeedPage;
 
 페이지 컴포넌트를 관리합니다. app/ 레이어의 라우팅 엔드포인트에 대응되는 실제 페이지 구현을 담당합니다.
 Next.js App router와의 충돌을 막기 위해 FSD에서 기본적으로 사용하는 'pages'폴더명 대신 'views'폴더명을 사용합니다.
+
 - auth/
   - sign-in/
     - ui
@@ -72,7 +82,6 @@ Next.js App router와의 충돌을 막기 위해 FSD에서 기본적으로 사�
     - api
   - sign-up/
 - dashboard/
-
 
 ### 🧩 widgets/
 
@@ -91,7 +100,7 @@ widgets를 구성하기 위한 비즈니스 로직의 구체적인 표현 기능
 
 ### 🧠 entities/
 
-비즈니스 엔티티(사용자, 상품 등)를 나타냅니다. 
+비즈니스 엔티티(사용자, 상품 등)를 나타냅니다.
 features에서 구체적인 동작이 부여되기 전인 비즈니스 주체들 (유저, 비디오, 라이크버튼 등)입니다.
 
 ### 🔄 shared/
@@ -114,10 +123,14 @@ shared/
 ## FSD 개발 원칙
 
 1. **상향식 의존성**: 각 모듈은 자신보다 낮은 레이어의 모듈만 의존할 수 있습니다 (app → views → widgets → features → entities → shared).
-  - e.g. features레이어는 widget의 컴포넌트를 참조할 수 없음
-  - 슬라이스는 같은 레이어 안에서 다른 슬라이스를 참조할 수 없다. 예를 들어, User 슬라이스는 같은 레이어의 Product 슬라이스를 참조할 수 없으며, 오직 필요한 경우에 한해 하위 레이어의 공통 요소들만 참조할 수 있다. 
+
+- e.g. features레이어는 widget의 컴포넌트를 참조할 수 없음
+- 슬라이스는 같은 레이어 안에서 다른 슬라이스를 참조할 수 없다. 예를 들어, User 슬라이스는 같은 레이어의 Product 슬라이스를 참조할 수 없으며, 오직 필요한 경우에 한해 하위 레이어의 공통 요소들만 참조할 수 있다.
+
 2. **명시적 공개 API**: 각 모듈은 index.ts를 통해 공개 API를 명시적으로 제공합니다.
-  - Public API에 정의되지 않은 내부적인 부분은 격리된 것으로 간주하여 그 자신의 Slice나 Segment만 여기에 접근할 수 있습니다.
+
+- Public API에 정의되지 않은 내부적인 부분은 격리된 것으로 간주하여 그 자신의 Slice나 Segment만 여기에 접근할 수 있습니다.
+
 3. **도메인 분리**: 비즈니스 도메인에 따라 기능을 분리합니다.
 4. **독립적 개발**: 각 기능은 독립적으로 개발 및 테스트할 수 있어야 합니다.
 5. **모듈화**: 각 모듈은 ui/, model/, lib/ 구조를 따릅니다.
@@ -127,4 +140,3 @@ shared/
    - **api/**: 외부 시스템과의 통신
 
 이 구조는 확장성, 유지보수성, 재사용성을 극대화하는 데 초점을 맞추고 있습니다.
-

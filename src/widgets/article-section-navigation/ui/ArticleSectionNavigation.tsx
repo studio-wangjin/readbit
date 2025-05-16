@@ -44,7 +44,7 @@ export function ArticleSectionNavigation({
       <div className="container mx-auto max-w-4xl space-y-4">
         <div className="flex items-center justify-between text-sm text-muted-foreground">
           <div>
-            섹션 {sectionInfo.currentIndex + 1} / {sectionInfo.totalCount}
+            {sectionInfo.currentIndex + 1} / {sectionInfo.totalCount} Bits
           </div>
         </div>
 

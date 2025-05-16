@@ -1,31 +1,27 @@
-import { UserInfo } from '@/src/features/auth/ui/UserInfo';
-import { requireAuth } from '@/src/shared/lib/auth';
+'use client';
+
 import { Button } from '@/src/shared/ui/button';
-import { FullPageCentered } from '@/src/shared/ui/layout';
-import Link from 'next/link';
+import { BottomNav } from '@/src/widgets/bottom-nav';
+import { GoalCards } from '@/src/widgets/goal-cards';
+import { ThisWeekStreak } from '@/src/widgets/this-week-streak';
+import { TodayLearning } from '@/src/widgets/today-learning';
 
-export default async function DashboardPage() {
-  const user = await requireAuth();
-
+export default function DashboardPage() {
   return (
     <main>
-      <FullPageCentered>
-        <h1>Dashboard</h1>
+      <div className="mx-auto p-4 flex flex-col gap-4">
+        <GoalCards />
 
-        <h2 className="text-xl font-semibold mb-4">User Information</h2>
-        <UserInfo user={user} />
-
-        <div className="flex flex-col gap-4 my-8">
-          <Link href="/articles/my">
-            <Button variant="secondary" className="w-full">
-              My Articles
-            </Button>
-          </Link>
-          <Link href="/articles/create">
-            <Button className="w-full">Create Article</Button>
-          </Link>
+        <div className="flex items-center justify-between mt-4 mb-2">
+          <span className="font-semibold">오늘의 학습</span>
+          <Button variant="ghost" size="icon" aria-label="새로고침">
+            ↻
+          </Button>
         </div>
-      </FullPageCentered>
+        <TodayLearning />
+        <ThisWeekStreak />
+      </div>
+      <BottomNav />
     </main>
   );
 }
