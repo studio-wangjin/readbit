@@ -1,21 +1,38 @@
-import { Card, CardContent } from '@/src/shared/ui/card';
 import { Button } from '@/src/shared/ui/button';
+import { Card, CardContent } from '@/src/shared/ui/card';
 import Link from 'next/link';
+import { parseArticleContent } from '@/src/features/article/lib';
+import { articleQueries } from '@/src/features/article/model/queries';
+import type { ReadingLog } from '@/src/features/article/model/types';
+import { useMyArticles } from '@/src/features/article/model/useMyArticles';
+import { useQuery } from '@tanstack/react-query';
 
-interface Article {
-  id: string;
-  title: string;
-  slug: string;
-  sectionCount?: number;
-  currentSection?: number;
-}
+export function TodayLearning() {
+  const { articles, isLoading } = useMyArticles();
+  const { data: logs } = useQuery<ReadingLog[]>(articleQueries.readingLog());
 
-interface TodayLearningProps {
-  articles: Article[];
-  isLoading: boolean;
-}
+  // 각 article에 대해 sectionCount, currentSection 계산
+  const todayLearningArticles = articles.map(article => {
+    // sectionCount 계산
+    let sectionCount = 0;
+    try {
+      sectionCount = parseArticleContent(article.content, { sourceUrl: article.link }).length;
+    } catch {
+      sectionCount = 0;
+    }
+    // currentSection 계산 (logs에서 articleId가 일치하는 것 중 sectionIndex 최대값)
+    const articleLogs = logs?.filter((log: ReadingLog) => log.article_id === article.id) ?? [];
+    const currentSection =
+      articleLogs.length > 0
+        ? Math.max(...articleLogs.map((l: ReadingLog) => l.section_index ?? 0)) + 1
+        : 0;
+    return {
+      ...article,
+      sectionCount,
+      currentSection,
+    };
+  });
 
-export function TodayLearning({ articles, isLoading }: TodayLearningProps) {
   return (
     <div className="mb-4 overflow-x-auto">
       <div className="flex gap-4 flex-nowrap min-h-[180px]">
@@ -28,7 +45,7 @@ export function TodayLearning({ articles, isLoading }: TodayLearningProps) {
             아직 작성한 아티클이 없습니다.
           </div>
         ) : (
-          articles.slice(0, 3).map(item => (
+          todayLearningArticles.slice(0, 3).map(item => (
             <Link
               key={item.id}
               href={`/articles/${item.slug}/sections?index=${item.currentSection}`}
