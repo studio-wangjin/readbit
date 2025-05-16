@@ -31,7 +31,7 @@ export function TodayLearning({ articles, isLoading }: TodayLearningProps) {
           articles.slice(0, 3).map(item => (
             <Link
               key={item.id}
-              href={`/articles/${item.slug}/sections`}
+              href={`/articles/${item.slug}/sections?index=${item.currentSection}`}
               className="min-w-[260px] max-w-[260px] flex flex-col justify-between h-[180px] hover:shadow-lg transition-shadow cursor-pointer rounded-lg"
               style={{ textDecoration: 'none' }}
             >
@@ -45,7 +45,7 @@ export function TodayLearning({ articles, isLoading }: TodayLearningProps) {
                   </div>
                   <div className="flex items-end justify-between mt-auto">
                     <span className="text-xs text-muted-foreground">
-                      {item.currentSection ?? 0} / {item.sectionCount ?? 0} bit
+                      {item.currentSection ?? 0} / {item.sectionCount ?? 0} Bits
                     </span>
                     <Button
                       size="sm"
