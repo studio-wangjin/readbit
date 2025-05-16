@@ -2,27 +2,13 @@
 
 import { Button } from '@/src/shared/ui/button';
 import { useMyArticles } from '@/src/features/article/model/useMyArticles';
-import { useQuery } from '@tanstack/react-query';
-import { articleQueries } from '@/src/features/article/model/queries';
-import { isSameDay, startOfWeek, addDays } from 'date-fns';
 import { BottomNav } from '@/src/widgets/bottom-nav';
 import { GoalCards } from '@/src/widgets/goal-cards';
 import { TodayLearning } from '@/src/widgets/today-learning';
-import { Streak } from '@/src/widgets/streak';
-
-const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+import { ThisWeekStreak } from '@/src/widgets/this-week-streak';
 
 export default function DashboardPage() {
   const { articles, isLoading } = useMyArticles();
-  const { data: logs, isLoading: isLogLoading } = useQuery(articleQueries.readingLog());
-
-  // 이번주(월~일) 각 요일별로 로그가 있는지 계산
-  const today = new Date();
-  const weekStart = startOfWeek(today, { weekStartsOn: 1 }); // 월요일 시작
-  const weekDates = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
-  const weekStreak = weekDates.map(
-    date => logs?.some(log => isSameDay(new Date(log.created_at), date)) ?? false
-  );
 
   return (
     <main>
@@ -36,19 +22,7 @@ export default function DashboardPage() {
           </Button>
         </div>
         <TodayLearning articles={articles} isLoading={isLoading} />
-        <Streak
-          days={days}
-          weekStreak={weekStreak}
-          isLoading={isLogLoading}
-          streakCount={(() => {
-            let streakCount = 0;
-            for (let i = 6; i >= 0; i--) {
-              if (weekStreak[i]) streakCount++;
-              else break;
-            }
-            return streakCount;
-          })()}
-        />
+        <ThisWeekStreak />
       </div>
       <BottomNav />
     </main>
