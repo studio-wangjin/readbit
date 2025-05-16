@@ -6,6 +6,7 @@ import { useMyArticles } from '@/src/features/article/model/useMyArticles';
 import { useQuery } from '@tanstack/react-query';
 import { articleQueries } from '@/src/features/article/model/queries';
 import { isSameDay, startOfWeek, addDays } from 'date-fns';
+import { BottomNav } from '@/src/widgets/bottom-nav';
 
 const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
@@ -113,25 +114,7 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
-
-      {/* 하단 네비게이션 */}
-      <nav
-        className="w-full fixed bottom-0 left-0 flex justify-between items-center border-t p-2 bg-background z-10"
-        style={{ maxWidth: '100vw' }}
-      >
-        <Button variant="ghost" className="flex-1 flex flex-col items-center" size="icon">
-          <span className="text-lg">🎓</span>
-          <span className="text-xs mt-1">학습하기</span>
-        </Button>
-        <Button variant="ghost" className="flex-1 flex flex-col items-center" size="icon">
-          <span className="text-lg">📁</span>
-          <span className="text-xs mt-1">저장소</span>
-        </Button>
-        <Button variant="ghost" className="flex-1 flex flex-col items-center" size="icon">
-          <span className="text-lg">⚙️</span>
-          <span className="text-xs mt-1">프로필</span>
-        </Button>
-      </nav>
+      <BottomNav />
     </main>
   );
 }
