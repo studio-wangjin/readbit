@@ -6,6 +6,8 @@ interface Article {
   id: string;
   title: string;
   slug: string;
+  sectionCount?: number;
+  currentSection?: number;
 }
 
 interface TodayLearningProps {
@@ -42,7 +44,9 @@ export function TodayLearning({ articles, isLoading }: TodayLearningProps) {
                     <div className="text-sm text-muted-foreground mb-4">아티클 부제</div>
                   </div>
                   <div className="flex items-end justify-between mt-auto">
-                    <span className="text-xs text-muted-foreground">0 / 12 bit</span>
+                    <span className="text-xs text-muted-foreground">
+                      {item.currentSection ?? 0} / {item.sectionCount ?? 0} bit
+                    </span>
                     <Button
                       size="sm"
                       className="bg-muted-foreground text-white"
