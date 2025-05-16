@@ -1,30 +1,14 @@
-import { requireAuth } from '@/src/shared/lib/auth';
+'use client';
+
 import { Button } from '@/src/shared/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/src/shared/ui/card';
-
-const todayLearning = [
-  {
-    title: 'You might not need Websockets',
-    tag: 'Javascript',
-    time: '5분',
-  },
-  {
-    title: 'What Really Happens When You Drop a Column in Postgres',
-    tag: 'React',
-    time: '5분',
-  },
-  {
-    title: 'You might not need Websockets',
-    tag: 'Python',
-    time: '5분',
-  },
-];
+import { useMyArticles } from '@/src/features/article/model/useMyArticles';
 
 const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 const streak = [true, true, true, true, true, false, false];
 
-export default async function DashboardPage() {
-  await requireAuth();
+export default function DashboardPage() {
+  const { articles, isLoading } = useMyArticles();
 
   return (
     <main className="min-h-screen flex flex-col justify-between">
@@ -52,18 +36,27 @@ export default async function DashboardPage() {
             ↻
           </Button>
         </div>
-        <div className="flex gap-2 mb-4">
-          {todayLearning.map((item, i) => (
-            <Card key={i} className="flex-1 min-w-0">
-              <CardContent className="pt-4 pb-2 px-4">
-                <div className="font-medium text-sm mb-2">{item.title}</div>
-                <div className="flex items-center gap-2 mt-4">
-                  <span className="text-xs px-2 py-0.5 rounded bg-muted">{item.tag}</span>
-                  <span className="text-xs text-muted-foreground">{item.time}</span>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+        <div className="flex gap-2 mb-4 min-h-[120px]">
+          {isLoading ? (
+            <div className="w-full text-center py-8 text-muted-foreground text-sm">
+              불러오는 중...
+            </div>
+          ) : articles.length === 0 ? (
+            <div className="w-full text-center py-8 text-muted-foreground text-sm">
+              아직 작성한 아티클이 없습니다.
+            </div>
+          ) : (
+            articles.slice(0, 3).map(item => (
+              <Card key={item.id} className="flex-1 min-w-0">
+                <CardContent className="pt-4 pb-2 px-4">
+                  <div className="font-medium text-sm mb-2 line-clamp-2">{item.title}</div>
+                  <div className="flex items-center gap-2 mt-4">
+                    {/* TODO: 태그/시간 정보가 있으면 표시, 없으면 생략 */}
+                  </div>
+                </CardContent>
+              </Card>
+            ))
+          )}
         </div>
 
         {/* Streak */}
