@@ -1,9 +1,11 @@
 import { Card, CardContent } from '@/src/shared/ui/card';
 import { Button } from '@/src/shared/ui/button';
+import Link from 'next/link';
 
 interface Article {
   id: string;
   title: string;
+  slug: string;
 }
 
 interface TodayLearningProps {
@@ -25,25 +27,34 @@ export function TodayLearning({ articles, isLoading }: TodayLearningProps) {
           </div>
         ) : (
           articles.slice(0, 3).map(item => (
-            <Card
+            <Link
               key={item.id}
-              className="min-w-[260px] max-w-[260px] flex flex-col justify-between h-[180px]"
+              href={`/articles/${item.slug}/sections`}
+              className="min-w-[260px] max-w-[260px] flex flex-col justify-between h-[180px] hover:shadow-lg transition-shadow cursor-pointer rounded-lg"
+              style={{ textDecoration: 'none' }}
             >
-              <CardContent className="flex flex-col h-full p-4">
-                <div className="flex-1">
-                  <div className="font-bold text-lg leading-tight mb-1 line-clamp-2">
-                    {item.title}
+              <Card className="flex-1 h-full">
+                <CardContent className="flex flex-col h-full p-4">
+                  <div className="flex-1">
+                    <div className="font-bold text-lg leading-tight mb-1 line-clamp-2">
+                      {item.title}
+                    </div>
+                    <div className="text-sm text-muted-foreground mb-4">아티클 부제</div>
                   </div>
-                  <div className="text-sm text-muted-foreground mb-4">아티클 부제</div>
-                </div>
-                <div className="flex items-end justify-between mt-auto">
-                  <span className="text-xs text-muted-foreground">0 / 12 bit</span>
-                  <Button size="sm" className="bg-muted-foreground text-white">
-                    Read
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+                  <div className="flex items-end justify-between mt-auto">
+                    <span className="text-xs text-muted-foreground">0 / 12 bit</span>
+                    <Button
+                      size="sm"
+                      className="bg-muted-foreground text-white"
+                      tabIndex={-1}
+                      type="button"
+                    >
+                      Read
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
           ))
         )}
       </div>
