@@ -9,6 +9,7 @@ alwaysApply: true
 - 코드를 작성하기 전 항상 [architecture-ko.md](mdc:docs/architecture-ko.md) 를 읽으세요. 이 문서는 프로젝트의 전체 데이터베이스 스키마를 포함합니다.
 - 새로운 컴포넌트나 기능을 추가하기 전에 [design-document-ko.md](mdc:docs/design-document-ko.md) 의 내용을 반드시 참고하세요.
 - 주요 기능을 추가하거나 마일스톤을 완료할 때마다 즉시 [architecture-ko.md](mdc:docs/architecture-ko.md) 및 [design-document-ko.md](mdc:docs/design-document-ko.md) 를 업데이트하세요.
+- Git commit은 하지 마세요.
 
 - **Simplicity**: Always prioritize the simplest solution over complexity
 - **DRY (Don't Repeat Yourself)**: Avoid code duplication, reuse functionality
