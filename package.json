@@ -28,6 +28,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
+    "html-react-parser": "^5.2.5",
     "jsdom": "^26.0.0",
     "lucide-react": "^0.483.0",
     "next": "15.2.3",
