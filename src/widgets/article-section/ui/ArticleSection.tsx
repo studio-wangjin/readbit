@@ -42,24 +42,13 @@ export function ArticleSection({ title, content }: ArticleSectionProps) {
         {content.map((html, idx) => (
           <div
             key={idx}
-            className="prose prose-lg max-w-none"
+            className="prose prose-lg max-w-none [&_.sentence-highlighted]:bg-yellow-300 [&_.sentence-highlighted]:px-1 [&_.sentence-highlighted]:py-0.5 [&_.sentence-highlighted]:rounded-sm"
             onMouseOver={handleMouseOver}
             onMouseOut={handleMouseOut}
             dangerouslySetInnerHTML={{ __html: wrapSentencesWithSpan(html) }}
           />
         ))}
       </div>
-      <style jsx>{`
-        .sentence-highlight {
-          cursor: pointer;
-          transition: background-color 0.2s ease;
-        }
-        .sentence-highlighted {
-          background-color: yellow;
-          padding: 2px 4px;
-          border-radius: 2px;
-        }
-      `}</style>
     </section>
   );
 }

@@ -14,7 +14,7 @@ export function wrapSentencesWithSpan(html: string): string {
       (sentenceMatch: string, sentence: string, trailing: string) => {
         const trimmedSentence = sentence.trim();
         if (trimmedSentence) {
-          return `<span class="sentence-highlight" data-sentence="${trimmedSentence}">${sentence}</span>${trailing}`;
+          return `<span class="sentence-highlight cursor-pointer transition-colors" data-sentence="${trimmedSentence}">${sentence}</span>${trailing}`;
         }
         return sentenceMatch;
       }
