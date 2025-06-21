@@ -6,9 +6,13 @@ import React from 'react';
 export interface ArticleSectionProps {
   title: string;
   content: string[];
+  onSentenceSelect?: (sentence: string, index: number) => void;
+  activeIndex?: number | null;
 }
 
-export function ArticleSection({ title, content }: ArticleSectionProps) {
+export function ArticleSection({ title, content, onSentenceSelect, activeIndex }: ArticleSectionProps) {
+  let sentenceCounter = 0;
+
   const options = {
     replace: (domNode: DOMNode) => {
       // <p> 태그만 특별 처리하여 문장 단위로 자식들을 재구성
@@ -55,11 +59,39 @@ export function ArticleSection({ title, content }: ArticleSectionProps) {
         return (
           // 원본 <p> 태그의 속성을 유지하면서 문장별로 <span>으로 감싼 새로운 자식들을 렌더링
           <p {...domNode.attribs}>
-            {groupedSentences.map((sentence, index) => (
-              <span key={index} className="sentence-highlight">
-                {sentence}
-              </span>
-            ))}
+            {groupedSentences.map((sentence) => {
+              const currentSentenceIndex = sentenceCounter++;
+              const isSelected = activeIndex === currentSentenceIndex;
+
+              const handleClick = () => {
+                if (!onSentenceSelect) return;
+
+                // React 노드 배열에서 순수 텍스트만 추출하는 함수
+                const getTextFromNodes = (nodes: React.ReactNode[]): string => {
+                  return nodes
+                    .map(node => {
+                      if (typeof node === 'string') return node;
+                      if (React.isValidElement<{ children?: React.ReactNode }>(node) && node.props.children) {
+                        return getTextFromNodes(React.Children.toArray(node.props.children));
+                      }
+                      return '';
+                    })
+                    .join('');
+                };
+
+                onSentenceSelect(getTextFromNodes(sentence).trim(), currentSentenceIndex);
+              };
+
+              return (
+                <span
+                  key={currentSentenceIndex}
+                  className={`sentence-highlight ${isSelected ? 'sentence-selected' : ''}`}
+                  onClick={handleClick}
+                >
+                  {sentence}
+                </span>
+              );
+            })}
           </p>
         );
       }
@@ -73,7 +105,13 @@ export function ArticleSection({ title, content }: ArticleSectionProps) {
         {content.map((html, idx) => (
           <div
             key={idx}
-            className="prose prose-lg max-w-none [&_.sentence-highlight:hover]:bg-yellow-300 [&_.sentence-highlight:hover]:px-1 [&_.sentence-highlight:hover]:py-0.5 [&_.sentence-highlight:hover]:rounded-sm [&_.sentence-highlight:active]:bg-yellow-300 [&_.sentence-highlight:active]:px-1 [&_.sentence-highlight:active]:py-0.5 [&_.sentence-highlight:active]:rounded-sm"
+            className="prose prose-lg max-w-none 
+            [&_.sentence-highlight:hover]:bg-yellow-200 
+            [&_.sentence-highlight:active]:bg-yellow-300
+            [&_.sentence-selected]:bg-yellow-400
+            [&_.sentence-highlight]:px-1
+            [&_.sentence-highlight]:py-0.5
+            [&_.sentence-highlight]:rounded-sm"
           >
             {parse(html, options)}
           </div>

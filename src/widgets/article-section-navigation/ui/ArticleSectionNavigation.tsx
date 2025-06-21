@@ -13,14 +13,17 @@ interface ArticleSectionNavigationProps {
   };
   articleId: string;
   onSubmit: (note: string) => Promise<void>;
+  note: string;
+  onNoteChange: (note: string) => void;
 }
 
 export function ArticleSectionNavigation({
   sectionInfo,
   articleId,
   onSubmit,
+  note,
+  onNoteChange,
 }: ArticleSectionNavigationProps) {
-  const [note, setNote] = useState('');
   const [loading, startTransition] = useLoading();
 
   const { data: noteFromServer } = useQuery(
@@ -29,11 +32,11 @@ export function ArticleSectionNavigation({
 
   useEffect(() => {
     if (noteFromServer) {
-      setNote(noteFromServer.note);
+      onNoteChange(noteFromServer.note);
     } else {
-      setNote('');
+      onNoteChange('');
     }
-  }, [noteFromServer]);
+  }, [noteFromServer, onNoteChange]);
 
   const handleSubmit = async () => {
     await onSubmit(note);
@@ -50,7 +53,7 @@ export function ArticleSectionNavigation({
 
         <SectionNoteInput
           value={note}
-          onChange={setNote}
+          onChange={onNoteChange}
           onSubmit={() => startTransition(handleSubmit())}
           isLoading={loading}
         />
