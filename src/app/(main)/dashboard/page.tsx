@@ -1,12 +1,14 @@
 import { createClient } from '@/src/shared/lib/supabase/server';
 import { redirect } from 'next/navigation';
-import { logout } from '@/src/features/auth/actions/logout';
+import { logout } from '@/src/domains/auth/actions';
 
 export default async function DashboardPage() {
   const supabase = await createClient();
-  
-  const { data: { user } } = await supabase.auth.getUser();
-  
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   if (!user) {
     redirect('/auth');
   }

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import SwipeCard from '@/src/app/cards/components/SwipeCard';
+import SwipeCard from '@/src/components/feature/ArticleSwipeCard';
 import { CardData } from '@/src/domains/article/schema';
 import { DUMMY_ARTICLES } from '@/src/domains/article/mock-data';
 
