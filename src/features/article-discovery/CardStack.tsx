@@ -1,17 +1,17 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import SwipeCard from './SwipeCard';
-import { CardData } from '../types/article';
-import { DUMMY_ARTICLES } from '../data/articles';
+import SwipeCard from '@/src/app/cards/components/SwipeCard';
+import { CardData } from '@/src/domains/article/types';
+import { DUMMY_ARTICLES } from '@/src/domains/article/mock-data';
 
 export default function CardStack() {
   const [currentArticleIndex, setCurrentArticleIndex] = useState(0);
   const [currentPartIndex, setCurrentPartIndex] = useState(0);
 
-  const getCardsToShow = (): CardData[] => {
+  const getCardsToShow = useCallback((): CardData[] => {
     const cards: CardData[] = [];
-    
+
     // 현재 카드
     const currentArticle = DUMMY_ARTICLES[currentArticleIndex];
     const currentPart = currentArticle.parts[currentPartIndex];
@@ -22,23 +22,24 @@ export default function CardStack() {
       part: currentPart,
       currentPart: currentPartIndex + 1,
       totalParts: 3,
-      category: currentArticle.category
+      category: currentArticle.category,
     });
 
     // 다음 카드들 (미리보기용)
     for (let i = 1; i <= 2; i++) {
       let nextArticleIndex = currentArticleIndex;
       let nextPartIndex = currentPartIndex + i;
-      
+
       // 다음 파트가 현재 아티클을 넘어가면 다음 아티클로
       if (nextPartIndex > 2) {
-        nextArticleIndex = (currentArticleIndex + Math.floor(nextPartIndex / 3)) % DUMMY_ARTICLES.length;
+        nextArticleIndex =
+          (currentArticleIndex + Math.floor(nextPartIndex / 3)) % DUMMY_ARTICLES.length;
         nextPartIndex = nextPartIndex % 3;
       }
-      
+
       const nextArticle = DUMMY_ARTICLES[nextArticleIndex];
       const nextPart = nextArticle.parts[nextPartIndex];
-      
+
       cards.push({
         id: `${nextArticle.id}-${nextPart.partNumber}`,
         articleId: nextArticle.id,
@@ -46,46 +47,54 @@ export default function CardStack() {
         part: nextPart,
         currentPart: nextPartIndex + 1,
         totalParts: 3,
-        category: nextArticle.category
+        category: nextArticle.category,
       });
     }
-    
-    return cards;
-  };
 
-  const handleSwipe = useCallback((direction: 'left' | 'right') => {
-    if (direction === 'right') {
-      // 계속 읽기 - 다음 파트로
-      if (currentPartIndex < 2) {
-        setCurrentPartIndex(prev => prev + 1);
+    return cards;
+  }, [currentArticleIndex, currentPartIndex]);
+
+  const handleSwipe = useCallback(
+    (direction: 'left' | 'right') => {
+      if (direction === 'right') {
+        // 계속 읽기 - 다음 파트로
+        if (currentPartIndex < 2) {
+          setCurrentPartIndex(prev => prev + 1);
+        } else {
+          // 3번째 파트 완료 - 다음 아티클로
+          setCurrentArticleIndex(prev => (prev + 1) % DUMMY_ARTICLES.length);
+          setCurrentPartIndex(0);
+        }
       } else {
-        // 3번째 파트 완료 - 다음 아티클로
+        // 아티클 건너뛰기 - 다음 아티클의 첫 파트로
         setCurrentArticleIndex(prev => (prev + 1) % DUMMY_ARTICLES.length);
         setCurrentPartIndex(0);
       }
-    } else {
-      // 아티클 건너뛰기 - 다음 아티클의 첫 파트로
-      setCurrentArticleIndex(prev => (prev + 1) % DUMMY_ARTICLES.length);
-      setCurrentPartIndex(0);
-    }
-  }, [currentPartIndex]);
+    },
+    [currentPartIndex]
+  );
+
+  const handleActionClick = useCallback(
+    (action: 'dislike' | 'bookmark' | 'like') => {
+      const currentCard = getCardsToShow()[0];
+      switch (action) {
+        case 'dislike':
+          handleSwipe('left');
+          break;
+        case 'like':
+          handleSwipe('right');
+          break;
+        case 'bookmark':
+          // TODO: 북마크 기능 구현
+          console.log('Bookmark clicked for:', currentCard.articleTitle);
+          break;
+      }
+    },
+    [getCardsToShow, handleSwipe]
+  );
 
   const cardsToShow = getCardsToShow();
 
-  const handleActionClick = useCallback((action: 'dislike' | 'bookmark' | 'like') => {
-    switch (action) {
-      case 'dislike':
-        handleSwipe('left');
-        break;
-      case 'like':
-        handleSwipe('right');
-        break;
-      case 'bookmark':
-        // TODO: 북마크 기능 구현
-        console.log('Bookmark clicked');
-        break;
-    }
-  }, [handleSwipe]);
 
   return (
     <div className="relative w-full h-screen flex flex-col bg-gray-50">
@@ -128,8 +137,18 @@ export default function CardStack() {
             onClick={() => handleActionClick('dislike')}
             className="w-14 h-14 rounded-full bg-white shadow-lg flex items-center justify-center hover:bg-gray-50 transition-colors"
           >
-            <svg className="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            <svg
+              className="w-6 h-6 text-red-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </button>
 
@@ -149,7 +168,11 @@ export default function CardStack() {
             className="w-14 h-14 rounded-full bg-white shadow-lg flex items-center justify-center hover:bg-gray-50 transition-colors"
           >
             <svg className="w-6 h-6 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
+              <path
+                fillRule="evenodd"
+                d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+                clipRule="evenodd"
+              />
             </svg>
           </button>
         </div>

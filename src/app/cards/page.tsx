@@ -1,9 +1,5 @@
-import CardStack from './components/CardStack';
+import CardStack from '@/src/features/article-discovery/CardStack';
 
 export default function CardsPage() {
-  return (
-    <div className="w-full min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      <CardStack />
-    </div>
-  );
+  return <CardStack />;
 }
