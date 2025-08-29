@@ -7,8 +7,6 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "lint:fsd": "steiger check src",
-    "lint:fsd:fix": "steiger fix src",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage"

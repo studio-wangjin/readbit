@@ -1,11 +1,13 @@
 ---
-description: 
-globs: 
+description:
+globs:
 alwaysApply: true
 ---
+
 ## Tech Stack - Tools & Technologies
 
 ### Core Technologies
+
 - TypeScript, Node.js, Next.js 15 App Router
 - React 19 with React Server Components (RSC)
 - Supabase for backend, database, and authentication
@@ -13,23 +15,8 @@ alwaysApply: true
 - React Hook Form for form management
 - Shadcn UI with Tailwind CSS
 
-### Architecture - Feature-Sliced Design (FSD)
-- Layer hierarchy (top to bottom):
-  - app/ - Application configuration
-  - views/ - Route pages and layouts (use views, rather than pages)
-  - widgets/ - Independent page blocks
-  - features/ - User interactions and business logic
-  - entities/ - Business entities (users, products)
-  - shared/ - Reusable infrastructure and UI
-- Rules:
-  - Each module exposes Public API via index.ts
-  - Modules only depend on lower layers
-  - Same-layer dependencies are prohibited
-  - Organize slices into ui/, model/, and lib/ segments
-  - Group by domains/ for business separation
-  - Develop features/entities in isolation
-
 ### Backend - Supabase
+
 - Implement row-level security (RLS) policies
 - Define TypeScript types for tables and queries
 - Use PostgreSQL features (foreign keys, constraints)
@@ -38,6 +25,7 @@ alwaysApply: true
 - Utilize Edge Functions for serverless operations
 
 ### Data Validation & Forms
+
 - Zod:
   - Create schemas in separate files with 'Schema' suffix
   - Generate types with z.infer<typeof schema>
@@ -52,18 +40,21 @@ alwaysApply: true
   - Reset after successful submission
 
 ### Server Actions
+
 - Use next-safe-action for type-safety
 - Define schemas with Zod
 - Return consistent ActionResponse types
 - Use useActionState for client-side error handling
 
 ### UI & Styling
+
 - Mobile-first responsive design with Tailwind
 - Shadcn UI for component library
 - Optimize images with WebP, lazy loading
 - Ensure accessibility with proper ARIA attributes
 
 ### Development Workflow
+
 - Follow Next.js App Router patterns and best practices
 - Prioritize Server Components over Client Components
 - Minimize 'use client' usage:
@@ -75,6 +66,5 @@ alwaysApply: true
 - Use dynamic loading for non-critical components
 - Create error boundaries using error.tsx and global-error.tsx files
 - Prioritize Web Vitals (LCP, CLS, FID) for performance
-- Follow FSD architecture principles
 - Use utility functions from shared/ layer
-- Create thorough documentation for complex features 
+- Create thorough documentation for complex features

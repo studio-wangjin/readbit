@@ -26,31 +26,15 @@ $ npm install
 $ npm run dev
 ```
 
-## Architecture
-
-This project follows Feature-Sliced Design (FSD) architecture. See [/docs/architecture-ko.md](/docs/architecture-ko.md) for details.
-
-We use [Steiger](https://github.com/feature-sliced/steiger) to enforce FSD architecture rules:
-
-```sh
-# Check architecture violations
-$ npm run lint:fsd
-
-# Fix some violations automatically
-$ npm run lint:fsd:fix
-```
-
 ## UI
 
 ### Components from Shadcn UI
 
-This project uses [Shadcn UI](https://ui.shadcn.com/) for components. We've integrated it with our FSD architecture by placing components in the `shared` layer:
+This project uses [Shadcn UI](https://ui.shadcn.com/) for components.
 
 ```sh
 # Add a new component
 $ npx shadcn@latest add button
-
-# This will add the component to src/shared/ui according to our FSD structure
 ```
 
 Refer to our `components.json` for the full configuration.
