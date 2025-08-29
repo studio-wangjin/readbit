@@ -1,21 +1,30 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useRef, useState, useCallback } from 'react';
+import { CardData } from '../types/article';
+
+const getArticleColors = (articleId: number) => {
+  const colorSchemes = [
+    'from-blue-500 to-purple-600',      // 기술 - 파란색/보라색
+    'from-green-500 to-teal-600',       // 환경 - 초록색/청록색  
+    'from-pink-500 to-rose-600',        // 비즈니스 - 핑크색/장미색
+    'from-orange-500 to-red-600',       // 추가 색상
+    'from-indigo-500 to-blue-600',      // 추가 색상
+  ];
+  
+  return colorSchemes[(articleId - 1) % colorSchemes.length];
+};
 
 interface SwipeCardProps {
-  id: number;
-  title: string;
-  content: string;
-  onSwipe: (direction: 'left' | 'right', id: number) => void;
+  cardData: CardData;
+  onSwipe: (direction: 'left' | 'right') => void;
   zIndex: number;
   scale: number;
   isTop: boolean;
 }
 
 export default function SwipeCard({
-  id,
-  title,
-  content,
+  cardData,
   onSwipe,
   zIndex,
   scale,
@@ -26,23 +35,23 @@ export default function SwipeCard({
   const [startPos, setStartPos] = useState({ x: 0, y: 0 });
   const cardRef = useRef<HTMLDivElement>(null);
 
-  const handleStart = (clientX: number, clientY: number) => {
+  const handleStart = useCallback((clientX: number, clientY: number) => {
     if (!isTop) return;
     
     setIsDragging(true);
     setStartPos({ x: clientX, y: clientY });
-  };
+  }, [isTop]);
 
-  const handleMove = (clientX: number, clientY: number) => {
+  const handleMove = useCallback((clientX: number, clientY: number) => {
     if (!isDragging || !isTop) return;
 
     const deltaX = clientX - startPos.x;
     const deltaY = clientY - startPos.y;
     
     setPosition({ x: deltaX, y: deltaY });
-  };
+  }, [isDragging, isTop, startPos.x, startPos.y]);
 
-  const handleEnd = () => {
+  const handleEnd = useCallback(() => {
     if (!isDragging || !isTop) return;
 
     const threshold = 100;
@@ -50,16 +59,16 @@ export default function SwipeCard({
 
     if (Math.abs(x) > threshold) {
       const direction = x > 0 ? 'right' : 'left';
-      onSwipe(direction, id);
+      onSwipe(direction);
     } else {
       setPosition({ x: 0, y: 0 });
     }
 
     setIsDragging(false);
-  };
+  }, [isDragging, isTop, position, onSwipe]);
 
   const rotation = position.x * 0.1;
-  const opacity = Math.max(0.3, 1 - Math.abs(position.x) / 300);
+  const opacity = isTop ? Math.max(0.3, 1 - Math.abs(position.x) / 300) : 1;
 
   return (
     <div
@@ -70,47 +79,66 @@ export default function SwipeCard({
       style={{
         transform: `translateX(${position.x}px) translateY(${position.y}px) rotate(${rotation}deg) scale(${scale})`,
         zIndex: zIndex,
-        opacity: isTop ? opacity : 1,
+        opacity: opacity,
         transition: isDragging ? 'none' : 'transform 0.3s ease-out, opacity 0.3s ease-out',
       }}
-      onMouseDown={(e) => handleStart(e.clientX, e.clientY)}
-      onMouseMove={(e) => handleMove(e.clientX, e.clientY)}
-      onMouseUp={handleEnd}
-      onMouseLeave={handleEnd}
-      onTouchStart={(e) => {
-        const touch = e.touches[0];
-        handleStart(touch.clientX, touch.clientY);
-      }}
-      onTouchMove={(e) => {
-        const touch = e.touches[0];
-        handleMove(touch.clientX, touch.clientY);
-      }}
-      onTouchEnd={handleEnd}
+{...(isTop ? {
+        onMouseDown: (e: React.MouseEvent) => handleStart(e.clientX, e.clientY),
+        onMouseMove: (e: React.MouseEvent) => handleMove(e.clientX, e.clientY),
+        onMouseUp: handleEnd,
+        onMouseLeave: handleEnd,
+        onTouchStart: (e: React.TouchEvent) => {
+          const touch = e.touches[0];
+          handleStart(touch.clientX, touch.clientY);
+        },
+        onTouchMove: (e: React.TouchEvent) => {
+          const touch = e.touches[0];
+          handleMove(touch.clientX, touch.clientY);
+        },
+        onTouchEnd: handleEnd,
+      } : {})}
     >
-      <div className="w-full h-full bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl p-6 text-white flex flex-col justify-between">
-        <div>
-          <h2 className="text-2xl font-bold mb-4">{title}</h2>
-          <p className="text-lg opacity-90 leading-relaxed">{content}</p>
-        </div>
-        
-        <div className="flex justify-between items-center">
-          <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
-            ❤️
+      <div className={`w-full h-full bg-gradient-to-br ${getArticleColors(cardData.articleId)} rounded-2xl p-6 text-white flex flex-col`}>
+        {/* 상단: 아티클 제목 + 진행도 */}
+        <div className="mb-6">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-medium bg-white/20 px-2 py-1 rounded-full">
+              {cardData.category}
+            </span>
+            <span className="text-sm font-bold">
+              {cardData.currentPart}/{cardData.totalParts}
+            </span>
           </div>
-          <div className="text-sm opacity-70">#{id}</div>
-          <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
-            🗑️
+          <h1 className="text-lg font-bold leading-tight opacity-90">
+            {cardData.articleTitle}
+          </h1>
+        </div>
+
+        {/* 메인 콘텐츠 */}
+        <div className="flex-1 flex flex-col">
+          <h2 className="text-xl font-bold mb-4">{cardData.part.title}</h2>
+          <p className="text-sm leading-relaxed opacity-90 flex-1">
+            {cardData.part.summary}
+          </p>
+        </div>
+
+        {/* 하단: 읽기 시간 */}
+        <div className="mt-4 pt-4 border-t border-white/20">
+          <div className="text-center">
+            <span className="text-xs opacity-70">
+              약 {cardData.part.readingTime}분 소요
+            </span>
           </div>
         </div>
       </div>
       
       {isTop && Math.abs(position.x) > 50 && (
         <div
-          className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-4xl font-bold ${
+          className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-2xl font-bold ${
             position.x > 0 ? 'text-green-400' : 'text-red-400'
           }`}
         >
-          {position.x > 0 ? 'LIKE' : 'NOPE'}
+          {position.x > 0 ? '계속 읽기' : '다른 글 읽기'}
         </div>
       )}
     </div>
