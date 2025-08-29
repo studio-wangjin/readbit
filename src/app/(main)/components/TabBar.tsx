@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { BookOpen, LayoutDashboard } from 'lucide-react';
-import { useUser } from '@/src/shared/remote/auth/hooks';
+import { useUser } from '@/src/remotes/auth/hooks';
 
 export default function TabBar() {
   const pathname = usePathname();
@@ -27,18 +27,16 @@ export default function TabBar() {
     <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200">
       <div className="max-w-4xl mx-auto">
         <nav className="flex justify-around">
-          {tabs.map((tab) => {
+          {tabs.map(tab => {
             const isActive = pathname === tab.href;
             const Icon = tab.icon;
-            
+
             return (
               <Link
                 key={tab.name}
                 href={tab.href}
                 className={`flex flex-col items-center py-3 px-4 flex-1 transition-colors ${
-                  isActive
-                    ? 'text-blue-600'
-                    : 'text-gray-500 hover:text-gray-700'
+                  isActive ? 'text-blue-600' : 'text-gray-500 hover:text-gray-700'
                 }`}
               >
                 <Icon className="w-6 h-6 mb-1" />
@@ -46,13 +44,11 @@ export default function TabBar() {
               </Link>
             );
           })}
-          
+
           <Link
             href="/profile"
             className={`flex flex-col items-center py-3 px-4 flex-1 transition-colors ${
-              pathname === '/profile'
-                ? 'text-blue-600'
-                : 'text-gray-500 hover:text-gray-700'
+              pathname === '/profile' ? 'text-blue-600' : 'text-gray-500 hover:text-gray-700'
             }`}
           >
             {user?.user_metadata?.avatar_url ? (
