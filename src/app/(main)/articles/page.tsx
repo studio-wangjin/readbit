@@ -7,7 +7,7 @@ import ArticleUrlInput from './components/ArticleUrlInput';
 import ArticleTabs from './components/ArticleTabs';
 import ArticleList from './components/ArticleList';
 
-export default function MyArticlesPage() {
+export default function ArticlesPage() {
   const [articles, setArticles] = useState<MyArticle[]>(MY_ARTICLES);
   const [activeTab, setActiveTab] = useState<'unread' | 'read'>('unread');
 
@@ -16,11 +16,9 @@ export default function MyArticlesPage() {
   };
 
   const handleToggleRead = (articleId: number) => {
-    setArticles(prev => 
-      prev.map(article => 
-        article.id === articleId 
-          ? { ...article, isRead: !article.isRead }
-          : article
+    setArticles(prev =>
+      prev.map(article =>
+        article.id === articleId ? { ...article, isRead: !article.isRead } : article
       )
     );
   };
@@ -32,7 +30,7 @@ export default function MyArticlesPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <ArticleUrlInput onAddArticle={handleAddArticle} />
-      
+
       <div className="max-w-4xl mx-auto">
         <div className="bg-white">
           <ArticleTabs
@@ -41,13 +39,13 @@ export default function MyArticlesPage() {
             unreadCount={unreadArticles.length}
             readCount={readArticles.length}
           />
-          
+
           <div className="p-6">
             <ArticleList
               articles={currentArticles}
               onToggleRead={handleToggleRead}
               emptyMessage={
-                activeTab === 'unread' 
+                activeTab === 'unread'
                   ? '읽을 아티클이 없습니다. URL을 추가해보세요!'
                   : '아직 읽은 아티클이 없습니다.'
               }
