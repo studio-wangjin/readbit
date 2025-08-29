@@ -35,19 +35,18 @@ export default function TabBar() {
               <Link
                 key={tab.name}
                 href={tab.href}
-                className={`flex flex-col items-center py-3 px-4 flex-1 transition-colors ${
+                className={`flex flex-col items-center py-4 px-4 flex-1 transition-colors ${
                   isActive ? 'text-blue-600' : 'text-gray-500 hover:text-gray-700'
                 }`}
               >
-                <Icon className="w-6 h-6 mb-1" />
-                <span className="text-xs font-medium">{tab.name}</span>
+                <Icon className="w-6 h-6" />
               </Link>
             );
           })}
 
           <Link
             href="/profile"
-            className={`flex flex-col items-center py-3 px-4 flex-1 transition-colors ${
+            className={`flex flex-col items-center py-4 px-4 flex-1 transition-colors ${
               pathname === '/profile' ? 'text-blue-600' : 'text-gray-500 hover:text-gray-700'
             }`}
           >
@@ -57,16 +56,15 @@ export default function TabBar() {
                 alt="Profile"
                 width={24}
                 height={24}
-                className="rounded-full mb-1 object-cover"
+                className="rounded-full object-cover"
               />
             ) : (
-              <div className="w-6 h-6 bg-gray-300 rounded-full mb-1 flex items-center justify-center">
+              <div className="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center">
                 <span className="text-xs text-gray-600">
                   {user?.email?.[0]?.toUpperCase() || '?'}
                 </span>
               </div>
             )}
-            <span className="text-xs font-medium">프로필</span>
           </Link>
         </nav>
       </div>
