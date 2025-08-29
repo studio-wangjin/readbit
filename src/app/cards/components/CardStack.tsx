@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import SwipeCard from '@/src/components/feature/ArticleSwipeCard';
+import SwipeCard from '@/src/components/SwipeCard';
+import ArticleCardContent from '@/src/app/cards/components/ArticleCardContent';
 import { CardData } from '@/src/domains/article/schema';
 import { DUMMY_ARTICLES } from '@/src/domains/article/mock-data';
 
@@ -95,7 +96,6 @@ export default function CardStack() {
 
   const cardsToShow = getCardsToShow();
 
-
   return (
     <div className="relative w-full h-screen flex flex-col bg-gray-50">
       {/* Header */}
@@ -116,14 +116,15 @@ export default function CardStack() {
             return (
               <SwipeCard
                 key={card.id}
-                cardData={card}
                 onSwipe={handleSwipe}
                 zIndex={zIndex}
                 scale={scale}
                 yOffset={yOffset}
                 opacity={opacity}
                 isTop={isTop}
-              />
+              >
+                <ArticleCardContent cardData={card} />
+              </SwipeCard>
             );
           })}
         </div>

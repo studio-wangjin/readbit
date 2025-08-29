@@ -1,4 +1,4 @@
-import CardStack from '@/src/components/feature/CardStack';
+import CardStack from './components/CardStack';
 
 export default function CardsPage() {
   return <CardStack />;
