@@ -1,4 +1,17 @@
-export default function ProfilePage() {
+import Image from 'next/image';
+import { createClient } from '@/src/shared/lib/supabase/server';
+import { redirect } from 'next/navigation';
+import { logout } from '@/src/features/auth/actions/logout';
+
+export default async function ProfilePage() {
+  const supabase = await createClient();
+  
+  const { data: { user } } = await supabase.auth.getUser();
+  
+  if (!user) {
+    redirect('/auth');
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-2xl mx-auto">
@@ -6,12 +19,26 @@ export default function ProfilePage() {
         
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
           <div className="flex items-center space-x-4 mb-6">
-            <div className="w-20 h-20 bg-gray-300 rounded-full flex items-center justify-center">
-              <span className="text-gray-600 text-2xl">👤</span>
-            </div>
+            {user.user_metadata?.avatar_url ? (
+              <Image
+                src={user.user_metadata.avatar_url}
+                alt="Profile"
+                width={80}
+                height={80}
+                className="rounded-full object-cover"
+              />
+            ) : (
+              <div className="w-20 h-20 bg-gray-300 rounded-full flex items-center justify-center">
+                <span className="text-gray-600 text-2xl">
+                  {user.email?.[0]?.toUpperCase() || '?'}
+                </span>
+              </div>
+            )}
             <div>
-              <h2 className="text-xl font-semibold text-gray-900">사용자 이름</h2>
-              <p className="text-gray-600">user@example.com</p>
+              <h2 className="text-xl font-semibold text-gray-900">
+                {user.user_metadata?.full_name || user.email?.split('@')[0] || '사용자'}
+              </h2>
+              <p className="text-gray-600">{user.email}</p>
             </div>
           </div>
           
@@ -42,9 +69,14 @@ export default function ProfilePage() {
           </button>
         </div>
 
-        <button className="w-full mt-6 px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors">
-          로그아웃
-        </button>
+        <form action={logout}>
+          <button 
+            type="submit"
+            className="w-full mt-6 px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+          >
+            로그아웃
+          </button>
+        </form>
       </div>
     </div>
   );

@@ -1,11 +1,14 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { BookOpen, LayoutDashboard, User } from 'lucide-react';
+import { BookOpen, LayoutDashboard } from 'lucide-react';
+import { useUser } from '@/src/shared/remote/auth/hooks';
 
 export default function TabBar() {
   const pathname = usePathname();
+  const { user } = useUser();
 
   const tabs = [
     {
@@ -17,11 +20,6 @@ export default function TabBar() {
       name: '대시보드',
       href: '/dashboard',
       icon: LayoutDashboard,
-    },
-    {
-      name: '프로필',
-      href: '/profile',
-      icon: User,
     },
   ];
 
@@ -48,6 +46,32 @@ export default function TabBar() {
               </Link>
             );
           })}
+          
+          <Link
+            href="/profile"
+            className={`flex flex-col items-center py-3 px-4 flex-1 transition-colors ${
+              pathname === '/profile'
+                ? 'text-blue-600'
+                : 'text-gray-500 hover:text-gray-700'
+            }`}
+          >
+            {user?.user_metadata?.avatar_url ? (
+              <Image
+                src={user.user_metadata.avatar_url}
+                alt="Profile"
+                width={24}
+                height={24}
+                className="rounded-full mb-1 object-cover"
+              />
+            ) : (
+              <div className="w-6 h-6 bg-gray-300 rounded-full mb-1 flex items-center justify-center">
+                <span className="text-xs text-gray-600">
+                  {user?.email?.[0]?.toUpperCase() || '?'}
+                </span>
+              </div>
+            )}
+            <span className="text-xs font-medium">프로필</span>
+          </Link>
         </nav>
       </div>
     </div>
