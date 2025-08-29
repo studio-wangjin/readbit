@@ -3,25 +3,29 @@
 ## 기술 스택
 
 ### 핵심 프레임워크
+
 - **Turbopack**: 빌드 도구
 - **Next.js 15**: App Router와 Turbopack 사용
 - **React 19**: TypeScript와 함께 사용
 - **Tailwind CSS 4**: 스타일링
 
 ### 주요 라이브러리
+
 - **Supabase**: 데이터베이스와 인증 (@supabase/supabase-js, @supabase/ssr)
-- **React Query**: 서버 상태 관리 (@tanstack/react-query)  
+- **React Query**: 서버 상태 관리 (@tanstack/react-query)
 - **React Hook Form**: Zod 검증과 함께 폼 관리
-- **Shadcn/ui**: UI 컴포넌트 라이브러리 (FSD 구조에 맞게 설정)
+- **Shadcn/ui**: UI 컴포넌트 라이브러리
 - **Lucide React**: 아이콘 라이브러리
 - **next-safe-action**: 타입 안전 서버 액션
 
 ### 테스팅
+
 - **Jest**: jsdom 환경과 함께
 - **Testing Library React**
 - 테스트는 `__tests__/` 디렉토리에 배치하거나 `.test.ts/.spec.ts` 접미사 사용
 
 ### 개발 도구 및 검증
+
 - **Zod**: 스키마 검증 및 타입 안전성
   - 'Schema' 접미사로 별도 파일에 스키마 생성
   - z.infer<typeof schema>로 타입 생성
@@ -36,6 +40,7 @@
   - 성공적인 제출 후 리셋
 
 ### Server Actions
+
 - next-safe-action으로 타입 안전성 확보
 - Zod로 스키마 정의
 - 일관된 ActionResponse 타입 반환
@@ -84,6 +89,7 @@ import { Book, Settings } from 'lucide-react';
 ## UI 및 스타일링
 
 ### 디자인 원칙
+
 - Tailwind를 사용한 모바일 우선 반응형 디자인
 - 컴포넌트 라이브러리로 Shadcn UI 사용
 - WebP 형식과 지연 로딩으로 이미지 최적화
@@ -92,6 +98,7 @@ import { Book, Settings } from 'lucide-react';
 ## 개발 워크플로우
 
 ### Next.js 패턴
+
 - Next.js App Router 패턴과 모범 사례 따르기
 - Client Component보다 Server Component 우선시
 - 'use client' 사용 최소화:

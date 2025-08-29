@@ -17,6 +17,11 @@ export const ArticleSchema = z.object({
   publishedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, '날짜는 YYYY-MM-DD 형식이어야 합니다'),
 });
 
+export const MyArticleSchema = ArticleSchema.extend({
+  isRead: z.boolean().default(false),
+  addedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, '추가일은 YYYY-MM-DD 형식이어야 합니다'),
+});
+
 export const CardDataSchema = z.object({
   id: z.string().min(1, 'ID는 필수입니다'),
   articleId: z.number().positive(),
@@ -31,3 +36,4 @@ export const CardDataSchema = z.object({
 export type Article = z.infer<typeof ArticleSchema>;
 export type ArticlePart = z.infer<typeof ArticlePartSchema>;
 export type CardData = z.infer<typeof CardDataSchema>;
+export type MyArticle = z.infer<typeof MyArticleSchema>;
