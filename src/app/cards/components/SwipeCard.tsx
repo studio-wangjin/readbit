@@ -20,6 +20,8 @@ interface SwipeCardProps {
   onSwipe: (direction: 'left' | 'right') => void;
   zIndex: number;
   scale: number;
+  yOffset?: number;
+  opacity?: number;
   isTop: boolean;
 }
 
@@ -28,6 +30,8 @@ export default function SwipeCard({
   onSwipe,
   zIndex,
   scale,
+  yOffset = 0,
+  opacity: cardOpacity = 1,
   isTop,
 }: SwipeCardProps) {
   const [isDragging, setIsDragging] = useState(false);
@@ -68,7 +72,8 @@ export default function SwipeCard({
   }, [isDragging, isTop, position, onSwipe]);
 
   const rotation = position.x * 0.1;
-  const opacity = isTop ? Math.max(0.3, 1 - Math.abs(position.x) / 300) : 1;
+  const swipeOpacity = isTop ? Math.max(0.3, 1 - Math.abs(position.x) / 300) : 1;
+  const finalOpacity = isTop ? swipeOpacity : cardOpacity;
 
   return (
     <div
@@ -77,10 +82,10 @@ export default function SwipeCard({
         isDragging ? 'cursor-grabbing' : ''
       } ${isTop ? '' : 'pointer-events-none'}`}
       style={{
-        transform: `translateX(${position.x}px) translateY(${position.y}px) rotate(${rotation}deg) scale(${scale})`,
+        transform: `translateX(${position.x}px) translateY(${position.y + yOffset}px) rotate(${rotation}deg) scale(${scale})`,
         zIndex: zIndex,
-        opacity: opacity,
-        transition: isDragging ? 'none' : 'transform 0.3s ease-out, opacity 0.3s ease-out',
+        opacity: finalOpacity,
+        transition: isDragging ? 'none' : 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
       }}
 {...(isTop ? {
         onMouseDown: (e: React.MouseEvent) => handleStart(e.clientX, e.clientY),
@@ -122,14 +127,6 @@ export default function SwipeCard({
           </p>
         </div>
 
-        {/* 하단: 읽기 시간 */}
-        <div className="mt-4 pt-4 border-t border-white/20">
-          <div className="text-center">
-            <span className="text-xs opacity-70">
-              약 {cardData.part.readingTime}분 소요
-            </span>
-          </div>
-        </div>
       </div>
       
       {isTop && Math.abs(position.x) > 50 && (
