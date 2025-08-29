@@ -1,16 +1,13 @@
-'use client'
+'use client';
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import { useState, type ReactNode } from 'react'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { useState, type ReactNode } from 'react';
 
 interface ProvidersProps {
-  children: ReactNode
+  children: ReactNode;
 }
 
-/**
- * TanStack Query Provider - 전역 상태 관리 및 API 요청 캐싱을 위한 Provider
- */
 export function ReactQueryProvider({ children }: ProvidersProps) {
   const [queryClient] = useState(
     () =>
@@ -24,12 +21,12 @@ export function ReactQueryProvider({ children }: ProvidersProps) {
           },
         },
       })
-  )
+  );
 
   return (
     <QueryClientProvider client={queryClient}>
       {children}
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
-  )
-} 
+  );
+}

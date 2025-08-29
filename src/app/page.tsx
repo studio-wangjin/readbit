@@ -1,5 +1,3 @@
-import { LandingPage } from '@/src/views/landing';
-
 export default function Home() {
-  return <LandingPage />;
+  return <div>Hello World</div>;
 }

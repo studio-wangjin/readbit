@@ -1,14 +1,12 @@
 ---
-description: 
-globs: 
+description:
+globs:
 alwaysApply: true
 ---
+
 ## Coding Preferences - Code Style & Quality Standards
 
 ### Core Principles
-- 코드를 작성하기 전 항상 [architecture-ko.md](mdc:docs/architecture-ko.md) 를 읽으세요. 이 문서는 프로젝트의 전체 데이터베이스 스키마를 포함합니다.
-- 새로운 컴포넌트나 기능을 추가하기 전에 [design-document-ko.md](mdc:docs/design-document-ko.md) 의 내용을 반드시 참고하세요.
-- 주요 기능을 추가하거나 마일스톤을 완료할 때마다 즉시 [architecture-ko.md](mdc:docs/architecture-ko.md) 및 [design-document-ko.md](mdc:docs/design-document-ko.md) 를 업데이트하세요.
 
 - **Simplicity**: Always prioritize the simplest solution over complexity
 - **DRY (Don't Repeat Yourself)**: Avoid code duplication, reuse functionality
@@ -16,6 +14,7 @@ alwaysApply: true
 - **Documentation**: Create `/docs/[component].md` after major component development
 
 ### Import Paths
+
 - Always include 'src' in import paths from project root
   - Correct: '@/src/features/article/api/getArticleBySlug'
   - Incorrect: '@/features/article/api/getArticleBySlug'
@@ -24,6 +23,7 @@ alwaysApply: true
 - Keep consistent import order across files
 
 ### Page & Component Organization (FSD)
+
 - Page routes go in `src/app` directory
 - Page components go in `src/views` directory following FSD structure
   - Correct: '@/src/views/articles/ui/ArticleDetailPage'
@@ -37,6 +37,7 @@ alwaysApply: true
 - Keep page components thin, delegate business logic to features layer
 
 ### Code Structure
+
 - Use functional, declarative programming (avoid classes)
 - Favor composition over inheritance
 - Structure files: exports → subcomponents → helpers → types
@@ -47,6 +48,7 @@ alwaysApply: true
 - Apply RORO pattern (Receive Object, Return Object)
 
 ### JavaScript/TypeScript
+
 - Use "function" keyword for pure functions, omit semicolons
 - Prefer interfaces over types, use maps instead of enums
 - Minimize conditional syntax:
@@ -55,6 +57,7 @@ alwaysApply: true
 - Always start with proper TypeScript interfaces/types
 
 ### Error Handling
+
 - Handle errors and edge cases first (early returns)
 - Place happy path last for better readability
 - Avoid nested if statements and unnecessary else blocks
@@ -64,10 +67,11 @@ alwaysApply: true
 - Services should throw user-friendly errors (for tanStackQuery)
 
 ### React Components
+
 - Write as functions (not arrow functions stored in constants)
 - Use declarative JSX
 - Extract static content to variables outside render functions
 - Place interfaces and types at file end
 - Prioritize Server Components where possible
 - Minimize 'use client' usage (only for Web API access)
-- Wrap client components in Suspense with fallback 
+- Wrap client components in Suspense with fallback
