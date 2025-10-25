@@ -46,3 +46,7 @@ next-env.d.ts
 
 # cursor
 .cursor/mcp.json
+
+## Panda
+styled-system
+styled-system-studio
